@@ -1,0 +1,3 @@
+Primary Color: 240, 188, 94   #F0BC5E
+P — Light: #ffee8e
+P — Dark: #ba8c2f
