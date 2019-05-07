@@ -5,6 +5,7 @@ import 'package:app_ipo/pages/singup_page.dart';
 import 'package:app_ipo/pages/configuracion_page.dart';
 import 'package:app_ipo/pages/restaurantes_page.dart';
 import 'package:app_ipo/pages/pedidos_page.dart';
+import 'package:app_ipo/pages/perfil_page.dart';
 
 /**
  * Diccionario (Map) con los nombres de las rutas como "claves" y 
@@ -23,6 +24,9 @@ final myRoutes = {
   SettingsPage.nombreRuta : (BuildContext context) => SettingsPage(),
   RestaurantesPage.nombreRuta : (BuildContext context) => RestaurantesPage(),
   PedidosPage.nombreRuta : (BuildContext context) => PedidosPage(),
+  PerfilPage.nombreRuta : (BuildContext context) => PerfilPage(),
+
+
  
 
 };

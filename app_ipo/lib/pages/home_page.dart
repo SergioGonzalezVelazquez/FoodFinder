@@ -17,36 +17,37 @@ class _HomePageState extends State<HomePage> {
  * seleccionado.
  */
 
-int _selectDrawerItem = 0;
-_getDrawerItemWidget(int pos){
-
-  switch(pos){
-    case 0: return new RestaurantesPage(); //Restaurantes
-    case 1: return new PedidosPage();//Pedidos
+  int _selectDrawerItem = 0;
+  _getDrawerItemWidget(int pos) {
+    switch (pos) {
+      case 0:
+        return new RestaurantesPage(); //Restaurantes
+      case 1:
+        return new PedidosPage(); //Pedidos
+    }
   }
 
-}
-
-_onSelectedItem(int pos){
-  setState(() {
+  _onSelectedItem(int pos) {
+    setState(() {
       _selectDrawerItem = pos;
-  });
-}
+    });
+  }
+
   ListTile _construirItem(
-      BuildContext context, IconData iconData, String texto, String ruta, {int pos}) {
+      BuildContext context, IconData iconData, String texto, String ruta,
+      {int pos}) {
     return new ListTile(
         leading: new Icon(iconData),
         title: new Text(texto),
         selected: (pos == _selectDrawerItem),
         onTap: () {
-          if(pos!=null){
+          if (pos != null) {
             Navigator.of(context).pop();
             _onSelectedItem(pos);
-          }
-          else{
+          } else {
             setState(() {
               Navigator.pushNamed(context, ruta);
-              });
+            });
           }
         });
   }
@@ -62,13 +63,19 @@ _onSelectedItem(int pos){
           //child: new Text("S",style: new TextStyle( color: Colors.white)),
         ),
       ),
-      _construirItem(
-          context, Icons.restaurant, "Restaurantes", "/restaurantes",pos: 0),
-      _construirItem(context, Icons.receipt, "Pedidos", "/pedidos",pos:1),
+      _construirItem(context, Icons.restaurant, "Restaurantes", "/restaurantes",
+          pos: 0),
+      _construirItem(context, Icons.receipt, "Pedidos", "/pedidos", pos: 1),
+      _construirItem(context, Icons.person, "Perfil", "/perfil"),
       new Divider(),
       _construirItem(
           context, Icons.settings, "Configuración", "/configuracion"),
-      _construirItem(context, Icons.exit_to_app, "Desconectar", "/",),
+      _construirItem(
+        context,
+        Icons.exit_to_app,
+        "Desconectar",
+        "/",
+      ),
       new AboutListTile(
         child: new Text("Acerca De"),
         applicationIcon: new Icon(Icons.info),
@@ -79,18 +86,22 @@ _onSelectedItem(int pos){
     ]);
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Scaffold(
       appBar: new AppBar(
+        //elevation: 0.0, //Quitar sombra de la appBar
         title: new Text('Food Finder'),
+        actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {},
+          ),
+        ],
       ),
       drawer: new Drawer(child: _construirListView(context)),
       body: _getDrawerItemWidget(_selectDrawerItem),
     );
   }
 }
-
- 
