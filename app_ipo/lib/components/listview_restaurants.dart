@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/item_restaurante_list.dart';
+import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/opinionRest_model.dart';
 
 class RestaurantsList extends StatefulWidget {
   @override
@@ -18,20 +20,174 @@ class _RestaurantsListState extends State<RestaurantsList> {
     // TODO: implement initState
     super.initState();
 
+    List<ModeloProducto> productosTelepizza = <ModeloProducto>[
+      ModeloProducto(
+          nombre: 'Sweet con Caja Roja',
+          imagen: "images/products/telepizza_cajaRoja.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 5.95),
+      ModeloProducto(
+          nombre: 'La Ibérica de Telepizza',
+          imagen: "images/products/telepizza_iberica.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 8.95),
+      ModeloProducto(
+          nombre: 'Tándem Gourmet',
+          imagen: "images/products/telepizza_tandem_gourmet.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 10.95),
+      ModeloProducto(
+          nombre: 'Vulcano Nachos',
+          imagen: "images/products/telepizza_vulcanoNachos.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 6.95),
+
+           ModeloProducto(
+          nombre: 'Sweet con Caja Roja',
+          imagen: "images/products/telepizza_cajaRoja.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 5.95),
+      ModeloProducto(
+          nombre: 'La Ibérica de Telepizza',
+          imagen: "images/products/telepizza_iberica.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 8.95),
+      ModeloProducto(
+          nombre: 'Tándem Gourmet',
+          imagen: "images/products/telepizza_tandem_gourmet.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 10.95),
+      ModeloProducto(
+          nombre: 'Vulcano Nachos',
+          imagen: "images/products/telepizza_vulcanoNachos.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 6.95),
+
+           ModeloProducto(
+          nombre: 'Sweet con Caja Roja',
+          imagen: "images/products/telepizza_cajaRoja.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 5.95),
+      ModeloProducto(
+          nombre: 'La Ibérica de Telepizza',
+          imagen: "images/products/telepizza_iberica.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 8.95),
+      ModeloProducto(
+          nombre: 'Tándem Gourmet',
+          imagen: "images/products/telepizza_tandem_gourmet.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 10.95),
+      ModeloProducto(
+          nombre: 'Vulcano Nachos',
+          imagen: "images/products/telepizza_vulcanoNachos.jpg",
+          descripcion: 'Nuestra masa de siempre cubierta de crujiente',
+          precio: 6.95),
+    ];
+
+    List<ModeloOpinionRestaurante> opinionesTelepizza =
+        <ModeloOpinionRestaurante>[
+      ModeloOpinionRestaurante(
+          nombreUser: 'José',
+          valoracion: 2,
+          comentario: 'Demasiado caro',
+          fecha: '20/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Óscar',
+          valoracion: 3,
+          comentario: 'Pedí barbacoa y me llegó otra cosa... pero muy rica!',
+          fecha: '02/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'David',
+          valoracion: 4,
+          comentario: 'Excellemt service. And the food was delicious!',
+          fecha: '25/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Adriana',
+          valoracion: 5,
+          comentario: 'La pizza está super buena!',
+          fecha: '12/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Rebeca',
+          valoracion: 1,
+          comentario: 'Es una lástima porque la comida siempre está '+
+           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
+           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          fecha: '12/03/2019'),
+
+           ModeloOpinionRestaurante(
+          nombreUser: 'José',
+          valoracion: 2,
+          comentario: 'Demasiado caro',
+          fecha: '20/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Óscar',
+          valoracion: 3,
+          comentario: 'Pedí barbacoa y me llegó otra cosa... pero muy rica!',
+          fecha: '02/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'David',
+          valoracion: 4,
+          comentario: 'Excellemt service. And the food was delicious!',
+          fecha: '25/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Adriana',
+          valoracion: 5,
+          comentario: 'La pizza está super buena!',
+          fecha: '12/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Rebeca',
+          valoracion: 1,
+          comentario: 'Es una lástima porque la comida siempre está '+
+           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
+           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          fecha: '12/03/2019'),
+
+           ModeloOpinionRestaurante(
+          nombreUser: 'José',
+          valoracion: 2,
+          comentario: 'Demasiado caro',
+          fecha: '20/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Óscar',
+          valoracion: 3,
+          comentario: 'Pedí barbacoa y me llegó otra cosa... pero muy rica!',
+          fecha: '02/04/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'David',
+          valoracion: 4,
+          comentario: 'Excellemt service. And the food was delicious!',
+          fecha: '25/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Adriana',
+          valoracion: 5,
+          comentario: 'La pizza está super buena!',
+          fecha: '12/03/2019'),
+      ModeloOpinionRestaurante(
+          nombreUser: 'Rebeca',
+          valoracion: 1,
+          comentario: 'Es una lástima porque la comida siempre está '+
+           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
+           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          fecha: '12/03/2019'),
+    ];
     restaurantes = <ModeloRestaurante>[
       ModeloRestaurante(
-        nombre: 'Telepizza',
-        imagen: "images/restaurants/logo_telepizza.png",
-        categoria: 'Italiana, Pizza',
-        valoracion: 4,
-        numValoraciones: 1872,
-        pedidoMinimo: 6.95,
-        distancia: '1.7',
-        envio: 0,
-      ),
+          nombre: 'Telepizza',
+          imagenLogo: "images/restaurants/logo_telepizza.png",
+          imagenFondo: "images/restaurants/fondo_telepizza.jpg",
+          categoria: 'Italiana, Pizza',
+          valoracion: 4,
+          numValoraciones: 1872,
+          pedidoMinimo: 6.95,
+          distancia: '1.7',
+          envio: 0,
+          productos: productosTelepizza,
+          opiniones: opinionesTelepizza),
       ModeloRestaurante(
         nombre: 'TGB The Good Burger',
-        imagen: "images/restaurants/logo_thegoodburger.jpg",
+        imagenLogo: "images/restaurants/logo_thegoodburger.jpg",
+        imagenFondo: "images/restaurants/fondo_tgb.jpg",
         categoria: 'Americana, Hamburguesas',
         valoracion: 3,
         numValoraciones: 751,
@@ -41,7 +197,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Pan Real',
-        imagen: "images/restaurants/logo_panReal.png",
+        imagenLogo: "images/restaurants/logo_panReal.png",
+        imagenFondo: "images/restaurants/fondo_panReal.jpg",
         categoria: 'Desayunos, Española',
         valoracion: 1,
         numValoraciones: 653,
@@ -51,7 +208,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Dominos Pizza',
-        imagen: "images/restaurants/logo_dominos.png",
+        imagenLogo: "images/restaurants/logo_dominos.png",
+        imagenFondo: "images/restaurants/fondo_dominos.jpg",
         categoria: 'Italiana, Pizza',
         valoracion: 4,
         numValoraciones: 901,
@@ -61,7 +219,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Bambola Restaurante',
-        imagen: "images/restaurants/logo_bambola.png",
+        imagenLogo: "images/restaurants/logo_bambola.png",
+        imagenFondo: "images/restaurants/fondo_bambola.jpg",
         categoria: 'Italiana, Pizza',
         valoracion: 4,
         numValoraciones: 511,
@@ -71,7 +230,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'La Capricciosa Italiana',
-        imagen: "images/restaurants/logo_capricciosa.jpg",
+        imagenLogo: "images/restaurants/logo_capricciosa.jpg",
+        imagenFondo: "images/restaurants/fondo_capricciosa.jpg",
         categoria: 'Italiana, Pizza',
         valoracion: 2,
         numValoraciones: 901,
@@ -81,7 +241,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Galeguesa',
-        imagen: "images/restaurants/logo_galeguesa.jpg",
+        imagenLogo: "images/restaurants/logo_galeguesa.jpg",
+        imagenFondo: "images/restaurants/fondo_galeguesa.jpg",
         categoria: 'Hamburguesas, Gourmet',
         valoracion: 5,
         numValoraciones: 201,
@@ -91,7 +252,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Home Burguer Bar',
-        imagen: "images/restaurants/logo_homeBurgerBar.png",
+        imagenLogo: "images/restaurants/logo_homeBurgerBar.png",
+        imagenFondo: "images/restaurants/fondo_homeburger.jpg",
         categoria: 'Americana, Hamburguesas',
         valoracion: 3,
         numValoraciones: 1071,
@@ -101,7 +263,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Sushi Star',
-        imagen: "images/restaurants/logo_dosushiStar.jpg",
+        imagenLogo: "images/restaurants/logo_sushiStar.jpg",
+        imagenFondo: "images/restaurants/fondo_sushi_star.jpg",
         categoria: 'Japonesa, Sushi',
         valoracion: 4,
         numValoraciones: 1421,
@@ -111,7 +274,8 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ),
       ModeloRestaurante(
         nombre: 'Nikko',
-        imagen: "images/restaurants/logo_nikko.jpg",
+        imagenLogo: "images/restaurants/logo_nikko.jpg",
+        imagenFondo: "images/restaurants/fondo_nikko.jpg",
         categoria: 'Italiana, Pizza',
         valoracion: 3,
         numValoraciones: 932,

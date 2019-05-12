@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
+import 'package:app_ipo/pages/restaurant_details.dart';
 
 class ItemRestauranteList extends StatelessWidget {
   final ModeloRestaurante _restaurante;
@@ -30,7 +31,7 @@ class ItemRestauranteList extends StatelessWidget {
                       color: Colors.transparent,
                       image: DecorationImage(
                           fit: BoxFit.fitHeight,
-                          image: AssetImage(_restaurante.imagen))),
+                          image: AssetImage(_restaurante.imagenLogo))),
                 ),
                 Padding(
                     // alignment: Alignment.bottomCenter,
@@ -72,7 +73,7 @@ class ItemRestauranteList extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
-                    child: Text('('+_restaurante.numValoraciones+')'),
+                    child: Text('(' + _restaurante.numValoraciones + ')'),
                   )
                 ],
               ),
@@ -93,6 +94,11 @@ class ItemRestauranteList extends StatelessWidget {
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             print('Has pulsado:' + _restaurante.nombre);
+            Route ruta = new MaterialPageRoute(
+                builder: (context) => new RestaurantDetailsPage(
+                      restaurante: _restaurante,
+                    ));
+            Navigator.push(context, ruta);
           },
         )
       ],

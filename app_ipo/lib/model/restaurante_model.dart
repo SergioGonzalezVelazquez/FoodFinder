@@ -1,6 +1,10 @@
+import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/opinionRest_model.dart';
+
 class ModeloRestaurante {
   String _nombre;
-  String _imagen;
+  String _imagenLogo;
+  String _imagenFondo;
   String _categoria;
   int _valoracion; //Valores entre 0 y 5
   int _numValoraciones;
@@ -10,19 +14,28 @@ class ModeloRestaurante {
   double _descuento;
 
   //Listado de productos
+  List<ModeloProducto> _productos = new List<ModeloProducto>();
+
+  //Listado de valoraciones
+  List<ModeloOpinionRestaurante> _opiniones =
+      new List<ModeloOpinionRestaurante>();
 
   ModeloRestaurante(
       {String nombre,
-      String imagen,
+      String imagenLogo,
+      String imagenFondo,
       String categoria,
       int valoracion,
       int numValoraciones,
       String distancia,
       double pedidoMinimo,
       double envio,
-      double descuento}) {
+      double descuento,
+      List<ModeloProducto> productos,
+      List<ModeloOpinionRestaurante> opiniones}) {
     this._nombre = nombre;
-    this._imagen = imagen;
+    this._imagenLogo = imagenLogo;
+    this._imagenFondo = imagenFondo;
     this._categoria = categoria;
     this._valoracion = valoracion;
     this._numValoraciones = numValoraciones;
@@ -30,10 +43,13 @@ class ModeloRestaurante {
     this._distancia = distancia;
     this._envio = envio;
     this._descuento = descuento;
+    this._opiniones = opiniones;
+    this._productos = productos;
   }
 
   String get nombre => _nombre;
-  String get imagen => _imagen;
+  String get imagenLogo => _imagenLogo;
+  String get imagenFondo => _imagenFondo;
   String get categoria => _categoria;
   int get valoracion => _valoracion;
   String get numValoraciones => _numValoraciones.toString();
@@ -41,4 +57,6 @@ class ModeloRestaurante {
   String get pedidoMinimo => _pedidoMinimo.toStringAsFixed(2);
   String get envio => _envio.toStringAsFixed(2);
   double get descuento => _descuento;
+  List<ModeloProducto> get productos => _productos;
+  List<ModeloOpinionRestaurante> get opiniones => _opiniones;
 }

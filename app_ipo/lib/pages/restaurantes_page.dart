@@ -13,6 +13,15 @@ class RestaurantesPage extends StatefulWidget {
 }
 
 class _RestaurantesPageState extends State<RestaurantesPage> {
+
+  //Propiedades dinámicas
+  int _numRestaurantes = 290;
+
+  void _setNumRestaurantes(int n){
+    setState(() {
+     _numRestaurantes = n;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -111,25 +120,22 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
             RestaurantTypeList(),
 
             //Barra con el número de resturantes encontrados
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 25,
+            Card(
+                color: new Color(0xffeeeeee),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 25,
+                  padding: const EdgeInsets.only(left: 15, top: 4),
 
-              margin: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                  child: new Text(_numRestaurantes.toString()+' restaurantes'),
 
-              decoration: BoxDecoration(
-                //color: Colors.black26,
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-                
-              ) 
-            ),
+                )),
 
             //Listado de restaurantes según el filtro
             Expanded(
               child: RestaurantsList(),
             )
             //RestaurantsList(),
-            
           ],
         ),
       ),
