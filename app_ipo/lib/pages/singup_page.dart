@@ -37,14 +37,14 @@ class SignUpPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: <Widget>[
-                    LoginPage.itemCard(context, 'Nombre y Apellido',
-                        Icons.person, false, TextInputType.text),
-                    LoginPage.itemCard(context, 'Correo Electrónico',
-                        Icons.email, false, TextInputType.emailAddress),
-                    LoginPage.itemCard(context, 'Contraseña', Icons.vpn_key,
-                        true, TextInputType.text),
-                    LoginPage.itemCard(context, 'Confirmar Contraseña',
-                        Icons.vpn_key, true, TextInputType.text),
+                    //LoginPage.itemCard(context, 'Nombre y Apellido',
+                      //  Icons.person, false, TextInputType.text),
+                    //LoginPage.itemCard(context, 'Correo Electrónico',
+                      //  Icons.email, false, TextInputType.emailAddress),
+                    //LoginPage.itemCard(context, 'Contraseña', Icons.vpn_key,
+                      //  true, TextInputType.text),
+                    //LoginPage.itemCard(context, 'Confirmar Contraseña',
+                      //  Icons.vpn_key, true, TextInputType.text),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.2,
                       height: 45,

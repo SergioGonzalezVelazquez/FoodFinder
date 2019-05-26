@@ -14,7 +14,7 @@ class ItemRestauranteList extends StatelessWidget {
     return new Column(
       children: <Widget>[
         new Divider(
-          height: 30.0,
+          height: 20.0,
         ),
         new ListTile(
           //Logo del restaurante y distancia (izq)

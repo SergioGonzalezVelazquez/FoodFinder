@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "997714387272",
+    "firebase_url": "https://proyecto-ipo-ii.firebaseio.com",
+    "project_id": "proyecto-ipo-ii",
+    "storage_bucket": "proyecto-ipo-ii.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997714387272:android:6210ebb410c52e9a",
+        "android_client_info": {
+          "package_name": "com.example.appipo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997714387272-m7953abct46072tk8bikqft55qaahrqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appipo",
+            "certificate_hash": "635563bee83a8efae642d36ad9d9c165979ac820"
+          }
+        },
+        {
+          "client_id": "997714387272-bvmlsog1a4pn54eqku5bkpspb1lm5dv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2-1YSUyAVHE_mYjD9a_ODtr5na1WrITY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997714387272-bvmlsog1a4pn54eqku5bkpspb1lm5dv2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

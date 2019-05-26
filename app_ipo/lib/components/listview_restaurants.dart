@@ -3,6 +3,11 @@ import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/item_restaurante_list.dart';
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
+
+//Database
+
+import 'dart:async';
 
 class RestaurantsList extends StatefulWidget {
   @override
@@ -13,13 +18,15 @@ class RestaurantsList extends StatefulWidget {
 }
 
 class _RestaurantsListState extends State<RestaurantsList> {
-  List<ModeloRestaurante> restaurantes;
+  List<ModeloRestaurante> listRestaurantes = List();
+  bool isLoading = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    _fetchRestaurants();
+    /*
     List<ModeloProducto> productosTelepizza = <ModeloProducto>[
       ModeloProducto(
           nombre: 'Sweet con Caja Roja',
@@ -41,8 +48,7 @@ class _RestaurantsListState extends State<RestaurantsList> {
           imagen: "images/products/telepizza_vulcanoNachos.jpg",
           descripcion: 'Nuestra masa de siempre cubierta de crujiente',
           precio: 6.95),
-
-           ModeloProducto(
+      ModeloProducto(
           nombre: 'Sweet con Caja Roja',
           imagen: "images/products/telepizza_cajaRoja.jpg",
           descripcion: 'Nuestra masa de siempre cubierta de crujiente',
@@ -62,8 +68,7 @@ class _RestaurantsListState extends State<RestaurantsList> {
           imagen: "images/products/telepizza_vulcanoNachos.jpg",
           descripcion: 'Nuestra masa de siempre cubierta de crujiente',
           precio: 6.95),
-
-           ModeloProducto(
+      ModeloProducto(
           nombre: 'Sweet con Caja Roja',
           imagen: "images/products/telepizza_cajaRoja.jpg",
           descripcion: 'Nuestra masa de siempre cubierta de crujiente',
@@ -110,12 +115,11 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ModeloOpinionRestaurante(
           nombreUser: 'Rebeca',
           valoracion: 1,
-          comentario: 'Es una lástima porque la comida siempre está '+
-           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
-           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          comentario: 'Es una lástima porque la comida siempre está ' +
+              'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
+              'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
           fecha: '12/03/2019'),
-
-           ModeloOpinionRestaurante(
+      ModeloOpinionRestaurante(
           nombreUser: 'José',
           valoracion: 2,
           comentario: 'Demasiado caro',
@@ -138,12 +142,11 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ModeloOpinionRestaurante(
           nombreUser: 'Rebeca',
           valoracion: 1,
-          comentario: 'Es una lástima porque la comida siempre está '+
-           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
-           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          comentario: 'Es una lástima porque la comida siempre está ' +
+              'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
+              'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
           fecha: '12/03/2019'),
-
-           ModeloOpinionRestaurante(
+      ModeloOpinionRestaurante(
           nombreUser: 'José',
           valoracion: 2,
           comentario: 'Demasiado caro',
@@ -166,9 +169,9 @@ class _RestaurantsListState extends State<RestaurantsList> {
       ModeloOpinionRestaurante(
           nombreUser: 'Rebeca',
           valoracion: 1,
-          comentario: 'Es una lástima porque la comida siempre está '+
-           'muy buena, pero esta vez el queso de la pasta estaba pasado '+
-           'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
+          comentario: 'Es una lástima porque la comida siempre está ' +
+              'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
+              'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
           fecha: '12/03/2019'),
     ];
     restaurantes = <ModeloRestaurante>[
@@ -284,16 +287,51 @@ class _RestaurantsListState extends State<RestaurantsList> {
         envio: 0,
       ),
     ];
+    */
+  }
+
+  void _fetchRestaurants() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    listRestaurantes = await conectorBBDD.restaurantes();
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: restaurantes.length,
-        itemBuilder: (context, int item) =>
-            new ItemRestauranteList(restaurantes[item]));
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return new Column(
+        children: <Widget>[
+          //Barra con el número de resturantes encontrados
+          Card(
+            color: new Color(0xffeeeeee),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 25,
+              padding: const EdgeInsets.only(left: 15, top: 4),
+              child: new Text(
+                  listRestaurantes.length.toString() + ' restaurantes'),
+            ),
+          ),
+          Expanded(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: listRestaurantes.length,
+                  itemBuilder: (context, int item) =>
+                      new ItemRestauranteList(listRestaurantes[item])))
+        ],
+      );
+    }
   }
 }

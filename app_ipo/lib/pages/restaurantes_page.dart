@@ -118,19 +118,6 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
 
             //Scroll horizontal con categorías de restaurantes
             RestaurantTypeList(),
-
-            //Barra con el número de resturantes encontrados
-            Card(
-                color: new Color(0xffeeeeee),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 25,
-                  padding: const EdgeInsets.only(left: 15, top: 4),
-
-                  child: new Text(_numRestaurantes.toString()+' restaurantes'),
-
-                )),
-
             //Listado de restaurantes según el filtro
             Expanded(
               child: RestaurantsList(),

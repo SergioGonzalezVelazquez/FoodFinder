@@ -2,6 +2,7 @@ import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
 
 class ModeloRestaurante {
+  String _id;
   String _nombre;
   String _imagenLogo;
   String _imagenFondo;
@@ -21,7 +22,8 @@ class ModeloRestaurante {
       new List<ModeloOpinionRestaurante>();
 
   ModeloRestaurante(
-      {String nombre,
+      {String id,
+      String nombre,
       String imagenLogo,
       String imagenFondo,
       String categoria,
@@ -47,6 +49,23 @@ class ModeloRestaurante {
     this._productos = productos;
   }
 
+   factory ModeloRestaurante.fromJson(Map<String, dynamic> jsonData) {
+    return ModeloRestaurante(
+      id: jsonData['id'],
+      nombre: jsonData['nombre'],
+      imagenLogo: jsonData['imagenLogo'],
+      imagenFondo: jsonData['imagenFondo'],
+      categoria: jsonData['categoria'],
+      valoracion: int.parse(jsonData['valoracion']),
+      numValoraciones: int.parse(jsonData['numValoraciones']),
+      distancia: jsonData['distancia'],
+      pedidoMinimo: double.parse(jsonData['pedidoMinimo']),
+      envio: double.parse(jsonData['envio']),
+      descuento: double.parse(jsonData['descuento']),
+    );
+  }
+
+  String get id => _id;
   String get nombre => _nombre;
   String get imagenLogo => _imagenLogo;
   String get imagenFondo => _imagenFondo;

@@ -15,6 +15,8 @@ class ModeloProducto {
     this._precio = precio;
   }
 
+  
+
   String get nombre => _nombre;
   String get imagen => _imagen;
   String get descripcion => _descripcion;
