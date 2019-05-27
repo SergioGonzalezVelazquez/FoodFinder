@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/pages/restaurantes_page.dart';
 import 'package:app_ipo/pages/pedidos_page.dart';
 
+
 class HomePage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/home";
@@ -93,12 +94,7 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         //elevation: 0.0, //Quitar sombra de la appBar
         title: new Text('Food Finder'),
-        actions: <Widget>[
-          new IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
       ),
       drawer: new Drawer(child: _construirListView(context)),
       body: _getDrawerItemWidget(_selectDrawerItem),

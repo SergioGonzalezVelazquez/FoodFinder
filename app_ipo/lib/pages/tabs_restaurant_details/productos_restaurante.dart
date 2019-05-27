@@ -17,20 +17,20 @@ class RestaurantMenus extends StatefulWidget {
 class _RestaurantMenuState extends State<RestaurantMenus> {
   @override
   Widget build(BuildContext context) {
-    if (widget.productos != null) {
+    if ((widget.productos == null) || widget.productos.length == 0) {
 // TODO: implement build
+      return new Container(
+        child: new Center(
+          child: new Text("No hay productos disponibles"),
+        ),
+      );
+    } else {
       return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: widget.productos.length,
           itemBuilder: (context, int item) =>
               new ItemProductoList(widget.productos[item]));
-    } else {
-      return new Container(
-        child: new Center(
-          child: new Text("No hay productos disponibles"),
-        ),
-      );
     }
   }
 }

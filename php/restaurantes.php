@@ -9,7 +9,7 @@ $consultaSQL="SELECT * FROM restaurantes";
 $resultadoConsulta = mysqli_query($conexion, $consultaSQL) or die ("Error al realizar la consulta");
 
 if (mysqli_num_rows($resultadoConsulta) > 0){
-	$respuestaJSON["restaurantes"] = array();
+	$respuestaJSON = array();
 	while ($fila = mysqli_fetch_array($resultadoConsulta)){
 		$restaurante = array();
 		$restaurante["id"] = $fila["id"];
@@ -24,7 +24,7 @@ if (mysqli_num_rows($resultadoConsulta) > 0){
 		$restaurante["envio"] = $fila["envio"];
 		$restaurante["descuento"] = $fila["descuento"];
 
-		array_push($respuestaJSON["restaurantes"], $restaurante);
+		array_push($respuestaJSON, $restaurante);
 	}
 	echo json_encode($respuestaJSON);
 }

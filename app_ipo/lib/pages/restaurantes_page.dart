@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //my own imports
 import 'package:app_ipo/components/listview_foodCategories.dart';
 import 'package:app_ipo/components/listview_restaurants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RestaurantesPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
@@ -13,15 +14,6 @@ class RestaurantesPage extends StatefulWidget {
 }
 
 class _RestaurantesPageState extends State<RestaurantesPage> {
-
-  //Propiedades dinámicas
-  int _numRestaurantes = 290;
-
-  void _setNumRestaurantes(int n){
-    setState(() {
-     _numRestaurantes = n;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -102,7 +94,8 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
                               color: Colors.blue,
                               onPressed: () {
                                 print("Has presionado el botón de búsqueda");
-                                Navigator.pushNamed(context, '/signup');
+                                Fluttertoast.showToast(
+                                    msg: "Funcionalidad no implementada... :(");
                               },
                             ),
                           ],
@@ -115,7 +108,6 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
               padding: const EdgeInsets.all(8.0),
               child: new Text('Tipos de cocinas populares'),
             ),
-
             //Scroll horizontal con categorías de restaurantes
             RestaurantTypeList(),
             //Listado de restaurantes según el filtro

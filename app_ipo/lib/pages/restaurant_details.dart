@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 //my own imports
 import 'package:app_ipo/model/restaurante_model.dart';
+import 'package:app_ipo/model/opinionRest_model.dart';
+import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
+import 'package:app_ipo/pages/cart_page.dart';
 
 //tabs imports
 import 'package:app_ipo/pages/tabs_restaurant_details/info_restaurante.dart';
-import 'package:app_ipo/pages/tabs_restaurant_details/menus.dart';
+import 'package:app_ipo/pages/tabs_restaurant_details/productos_restaurante.dart';
 import 'package:app_ipo/pages/tabs_restaurant_details/opiniones.dart';
+
+//bbdd
+import 'package:app_ipo/data/gestorBBDD.dart';
 
 class RestaurantDetailsPage extends StatefulWidget {
   //Propiedad inmutable
@@ -26,16 +32,60 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     with SingleTickerProviderStateMixin {
   @override
   TabController _controladorTabs;
+  bool isLoadingOpinions = false;
+  bool isLoadingProducts = false;
+
+  void _fetchOpiniones() async {
+    setState(() {
+      isLoadingOpinions = true;
+    });
+
+    List<ModeloOpinionRestaurante> opiniones =
+        await conectorBBDD.opiniones(widget.restaurante.id);
+    widget.restaurante.opiniones = opiniones;
+
+    setState(() {
+      isLoadingOpinions = false;
+    });
+  }
+
+  void _fetchProductos() async {
+    setState(() {
+      isLoadingProducts = true;
+    });
+
+    List<ModeloProducto> productos =
+        await conectorBBDD.productos(widget.restaurante.id);
+    widget.restaurante.productos = productos;
+
+    setState(() {
+      isLoadingProducts = false;
+    });
+  }
 
   void initState() {
     super.initState();
+
     _controladorTabs = new TabController(vsync: this, length: 3);
+    _fetchOpiniones();
+    _fetchProductos();
   }
 
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: new AppBar(title: new Text(widget.restaurante.nombre)),
+      appBar: new AppBar(
+        title: new Text(widget.restaurante.nombre),
+        centerTitle: true,
+        actions: <Widget>[
+          new IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.pushNamed(context, CartPage.nombreRuta);
+            },
+          ),
+        ],
+      ),
       body: new Container(
         child: new Column(
           children: <Widget>[
@@ -130,8 +180,18 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               child: new TabBarView(
                 controller: _controladorTabs,
                 children: <Widget>[
-                  new RestaurantMenus(productos: widget.restaurante.productos),
-                  new RestaurantOpiniones(opiniones: widget.restaurante.opiniones),
+                  isLoadingProducts
+                      ? new Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : new RestaurantMenus(
+                          productos: widget.restaurante.productos),
+                  isLoadingOpinions
+                      ? new Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : new RestaurantOpiniones(
+                          opiniones: widget.restaurante.opiniones),
                   new RestaurantInfo(),
                 ],
               ),

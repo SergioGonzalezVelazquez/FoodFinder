@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/pages/producto_details.dart';
 
 
 class ItemProductoList extends StatelessWidget {
@@ -51,6 +52,11 @@ class ItemProductoList extends StatelessWidget {
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             print('Has pulsado:' + _producto.nombre);
+            Route ruta = new MaterialPageRoute(
+                builder: (context) => new ProductDetailsPage(
+                     producto: _producto,
+                    ));
+            Navigator.push(context, ruta);
           },
         )
       ],

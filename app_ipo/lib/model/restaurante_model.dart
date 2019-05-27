@@ -2,7 +2,7 @@ import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
 
 class ModeloRestaurante {
-  String _id;
+  int _id;
   String _nombre;
   String _imagenLogo;
   String _imagenFondo;
@@ -22,7 +22,7 @@ class ModeloRestaurante {
       new List<ModeloOpinionRestaurante>();
 
   ModeloRestaurante(
-      {String id,
+      {int id,
       String nombre,
       String imagenLogo,
       String imagenFondo,
@@ -35,6 +35,7 @@ class ModeloRestaurante {
       double descuento,
       List<ModeloProducto> productos,
       List<ModeloOpinionRestaurante> opiniones}) {
+    this._id = id;
     this._nombre = nombre;
     this._imagenLogo = imagenLogo;
     this._imagenFondo = imagenFondo;
@@ -49,9 +50,9 @@ class ModeloRestaurante {
     this._productos = productos;
   }
 
-   factory ModeloRestaurante.fromJson(Map<String, dynamic> jsonData) {
+  factory ModeloRestaurante.fromJson(Map<String, dynamic> jsonData) {
     return ModeloRestaurante(
-      id: jsonData['id'],
+      id: int.parse(jsonData['id']),
       nombre: jsonData['nombre'],
       imagenLogo: jsonData['imagenLogo'],
       imagenFondo: jsonData['imagenFondo'],
@@ -65,7 +66,7 @@ class ModeloRestaurante {
     );
   }
 
-  String get id => _id;
+  int get id => _id;
   String get nombre => _nombre;
   String get imagenLogo => _imagenLogo;
   String get imagenFondo => _imagenFondo;
@@ -78,4 +79,10 @@ class ModeloRestaurante {
   double get descuento => _descuento;
   List<ModeloProducto> get productos => _productos;
   List<ModeloOpinionRestaurante> get opiniones => _opiniones;
+
+  void set productos(List<ModeloProducto> products) =>
+      this._productos = products;
+
+  void set opiniones(List<ModeloOpinionRestaurante> opinions) =>
+      this._opiniones = opinions;
 }

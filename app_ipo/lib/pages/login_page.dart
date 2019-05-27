@@ -13,7 +13,13 @@ class LoginPage extends StatefulWidget {
   static const nombreRuta = "/login";
   static String logo = 'images/food-location.png';
 
-  static Widget itemCard(BuildContext context, Widget widgetChild) => Container(
+  static Widget itemCard(BuildContext context,
+          {String hint,
+          IconData icono,
+          bool oscureText,
+          TextInputType tipoTexto,
+          TextEditingController controller}) =>
+      Container(
         width: MediaQuery.of(context).size.width / 1.2,
         height: 45,
         margin: EdgeInsets.only(top: 22),
@@ -26,7 +32,20 @@ class LoginPage extends StatefulWidget {
             borderRadius: BorderRadius.all(Radius.circular(50)),
             color: Colors.white,
             boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-        child: widgetChild,
+        child: TextFormField(
+          maxLines: 1,
+          controller: controller,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            icon: Icon(
+              icono,
+              color: Colors.grey,
+            ),
+            hintText: hint,
+          ),
+          obscureText: oscureText,
+          keyboardType: tipoTexto,
+        ),
       );
 
   _LoginPageState createState() => _LoginPageState();
@@ -45,11 +64,11 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
- 
+
     User usuario = await conectorBBDD.login(email, pass);
     if (usuario != null) {
       //Login correcto
-      print('ok '+ usuario.nombre);
+      print('ok ' + usuario.nombre);
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       //Login incorrecto
@@ -138,40 +157,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    final txtEmail = TextFormField(
-      maxLines: 1,
-      autofocus: false,
-      obscureText: false,
-      controller: _emailController,
-      decoration: new InputDecoration(
-        border: InputBorder.none,
-        icon: Icon(
-          Icons.email,
-          color: Colors.grey,
-        ),
-        hintText: 'Correo electrónico',
-      ),
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-    );
-
-    final txtPassword = TextFormField(
-      maxLines: 1,
-      autofocus: false,
-      controller: _passController,
-      decoration: new InputDecoration(
-        border: InputBorder.none,
-        icon: Icon(
-          Icons.email,
-          color: Colors.grey,
-        ),
-        hintText: 'Contraseña',
-      ),
-      obscureText: true,
-      keyboardType: TextInputType.text,
-      validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-    );
-
     final loginButton = Container(
       width: MediaQuery.of(context).size.width / 1.2,
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -183,7 +168,6 @@ class _LoginPageState extends State<LoginPage> {
           // _emailLogin(
           //   email: _email.text, password: _password.text, context: context);
           print(_emailController.text);
-          //Navigator.pushReplacementNamed(context, '/home');
           sign_in(_emailController.text, _passController.text);
           //handleSignIn();
         },
@@ -223,8 +207,18 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(top: 12),
               child: Column(
                 children: <Widget>[
-                  LoginPage.itemCard(context, txtEmail),
-                  LoginPage.itemCard(context, txtPassword),
+                  LoginPage.itemCard(context,
+                      hint: 'Correo Electrónico',
+                      icono: Icons.email,
+                      oscureText: false,
+                      tipoTexto: TextInputType.emailAddress,
+                      controller: _emailController),
+                  LoginPage.itemCard(context,
+                      hint: 'Contraseña',
+                      icono: Icons.vpn_key,
+                      oscureText: true,
+                      tipoTexto: TextInputType.text,
+                      controller: _passController),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(

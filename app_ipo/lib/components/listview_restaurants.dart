@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/item_restaurante_list.dart';
-import 'package:app_ipo/model/producto_model.dart';
-import 'package:app_ipo/model/opinionRest_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
-
-//Database
-
-import 'dart:async';
 
 class RestaurantsList extends StatefulWidget {
   @override
@@ -25,7 +19,7 @@ class _RestaurantsListState extends State<RestaurantsList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchRestaurants();
+    _fetchRestaurants(); //MYSQL 
     /*
     List<ModeloProducto> productosTelepizza = <ModeloProducto>[
       ModeloProducto(
@@ -119,60 +113,7 @@ class _RestaurantsListState extends State<RestaurantsList> {
               'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
               'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
           fecha: '12/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'José',
-          valoracion: 2,
-          comentario: 'Demasiado caro',
-          fecha: '20/04/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Óscar',
-          valoracion: 3,
-          comentario: 'Pedí barbacoa y me llegó otra cosa... pero muy rica!',
-          fecha: '02/04/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'David',
-          valoracion: 4,
-          comentario: 'Excellemt service. And the food was delicious!',
-          fecha: '25/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Adriana',
-          valoracion: 5,
-          comentario: 'La pizza está super buena!',
-          fecha: '12/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Rebeca',
-          valoracion: 1,
-          comentario: 'Es una lástima porque la comida siempre está ' +
-              'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
-              'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
-          fecha: '12/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'José',
-          valoracion: 2,
-          comentario: 'Demasiado caro',
-          fecha: '20/04/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Óscar',
-          valoracion: 3,
-          comentario: 'Pedí barbacoa y me llegó otra cosa... pero muy rica!',
-          fecha: '02/04/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'David',
-          valoracion: 4,
-          comentario: 'Excellemt service. And the food was delicious!',
-          fecha: '25/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Adriana',
-          valoracion: 5,
-          comentario: 'La pizza está super buena!',
-          fecha: '12/03/2019'),
-      ModeloOpinionRestaurante(
-          nombreUser: 'Rebeca',
-          valoracion: 1,
-          comentario: 'Es una lástima porque la comida siempre está ' +
-              'muy buena, pero esta vez el queso de la pasta estaba pasado ' +
-              'y tenía sabor a rancio. Las patatas de la milanesa estaban incomestibles.',
-          fecha: '12/03/2019'),
+     
     ];
     restaurantes = <ModeloRestaurante>[
       ModeloRestaurante(

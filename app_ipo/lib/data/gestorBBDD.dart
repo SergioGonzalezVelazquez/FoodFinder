@@ -3,9 +3,13 @@ import 'package:http/http.dart' as http;
 
 import 'package:app_ipo/model/user_model.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
+import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/opinionRest_model.dart';
 
 final String endpointBBDD = "https://ipo-flutter.000webhostapp.com/";
-final String phpRestaurantes = "restaurant.php";
+final String phpRestaurantes = "restaurantes.php";
+final String phpOpiniones = "opiniones.php";
+final String phpProductos = "productos.php";
 final String phpLogin = "login.php";
 
 class conectorBBDD {
@@ -25,12 +29,27 @@ class conectorBBDD {
   }
 
   static Future<List<ModeloRestaurante>> restaurantes() async {
-    
     final response = await http.get(endpointBBDD + phpRestaurantes);
-
     List restaurantes = json.decode(response.body);
-    print(restaurantes);
-
     return restaurantes.map((i) => new ModeloRestaurante.fromJson(i)).toList();
+  }
+
+  static Future<List<ModeloProducto>> productos(int idRestaurante) async {
+    final response = await http.post(endpointBBDD + phpProductos, body: {
+      "idRestaurante": idRestaurante.toString(),
+    });
+    List productos = json.decode(response.body);
+    return productos.map((i) => new ModeloProducto.fromJson(i)).toList();
+  }
+
+  static Future<List<ModeloOpinionRestaurante>> opiniones(
+      int idRestaurante) async {
+    final response = await http.post(endpointBBDD + phpOpiniones, body: {
+      "idRestaurante": idRestaurante.toString(),
+    });
+    List opiniones = json.decode(response.body);
+    return opiniones
+        .map((i) => new ModeloOpinionRestaurante.fromJson(i))
+        .toList();
   }
 }

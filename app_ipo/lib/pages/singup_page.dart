@@ -5,6 +5,11 @@ class SignUpPage extends StatelessWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/signup";
 
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _pass2Controller = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -37,14 +42,30 @@ class SignUpPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: <Widget>[
-                    //LoginPage.itemCard(context, 'Nombre y Apellido',
-                      //  Icons.person, false, TextInputType.text),
-                    //LoginPage.itemCard(context, 'Correo Electrónico',
-                      //  Icons.email, false, TextInputType.emailAddress),
-                    //LoginPage.itemCard(context, 'Contraseña', Icons.vpn_key,
-                      //  true, TextInputType.text),
-                    //LoginPage.itemCard(context, 'Confirmar Contraseña',
-                      //  Icons.vpn_key, true, TextInputType.text),
+                    LoginPage.itemCard(context,
+                        hint: 'Nombre y Apellido',
+                        icono: Icons.person,
+                        oscureText: false,
+                        tipoTexto: TextInputType.text,
+                        controller: _nombreController),
+                    LoginPage.itemCard(context,
+                        hint: 'Correo Electrónico',
+                        icono: Icons.email,
+                        oscureText: false,
+                        tipoTexto: TextInputType.emailAddress,
+                        controller: _emailController),
+                    LoginPage.itemCard(context,
+                        hint: 'Contraseña',
+                        icono: Icons.vpn_key,
+                        oscureText: true,
+                        tipoTexto: TextInputType.text,
+                        controller: _passController),
+                    LoginPage.itemCard(context,
+                        hint: 'Confirmar Contraseña',
+                        icono: Icons.vpn_key,
+                        oscureText: true,
+                        tipoTexto: TextInputType.text,
+                        controller: _pass2Controller),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.2,
                       height: 45,
