@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/pages/producto_details.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
 
 class ItemProductoList extends StatelessWidget {
   final Producto _producto;
@@ -27,7 +28,8 @@ class ItemProductoList extends StatelessWidget {
                 color: Colors.transparent,
                 image: DecorationImage(
                     fit: BoxFit.fitHeight,
-                    image: AssetImage(_producto.imagen))),
+                    image: NetworkImage(ConectorBBDD.endpointBBDD +
+                              _producto.imagen))),
           ),
           //Nombre del producto y precio
           title: new Row(

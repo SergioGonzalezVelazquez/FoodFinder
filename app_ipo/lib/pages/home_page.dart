@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/pages/restaurantes_page.dart';
-import 'package:app_ipo/pages/pedidos_page.dart';
+import 'package:app_ipo/pages/pedidos/pedidos_page.dart';
 
 
 class HomePage extends StatefulWidget {

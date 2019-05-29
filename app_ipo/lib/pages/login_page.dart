@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
       loading = true;
     });
 
-    User usuario = await conectorBBDD.login(email, pass);
+    User usuario = await ConectorBBDD.login(email, pass);
     if (usuario != null) {
       //Login correcto
       print('ok ' + usuario.nombre);

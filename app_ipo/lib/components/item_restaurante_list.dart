@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
 import 'package:app_ipo/pages/restaurant_details.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
+
 
 class ItemRestauranteList extends StatelessWidget {
   final Restaurante _restaurante;
@@ -31,7 +33,8 @@ class ItemRestauranteList extends StatelessWidget {
                       color: Colors.transparent,
                       image: DecorationImage(
                           fit: BoxFit.fitHeight,
-                          image: AssetImage(_restaurante.imagenLogo))),
+                          image: NetworkImage(ConectorBBDD.endpointBBDD +
+                              _restaurante.imagenLogo))),
                 ),
                 Padding(
                     // alignment: Alignment.bottomCenter,

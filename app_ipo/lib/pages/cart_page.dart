@@ -21,11 +21,19 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> implements ObservadorPedido {
   // the GlobalKey is needed to animate the list
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  double subtotal;
 
   @override
   void initState() {
     super.initState();
-    //widget.pedidoActual.registrarObservador(this);
+    widget.pedidoActual.registrarObservador(this);
+    subtotal = widget.pedidoActual.subtotal;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.pedidoActual.eliminarObservador(this);
   }
 
   Widget _btnPagar() {
@@ -98,7 +106,7 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
           right: MediaQuery.of(context).size.width / 30),
       child: Column(
         children: <Widget>[
-          _infoImporte('Subtotal', widget.pedidoActual.subtotal),
+          _infoImporte('Subtotal', subtotal),
           SizedBox(height: 10.0),
           _infoImporte('Descuento', widget.pedidoActual.descuento),
           SizedBox(height: 10.0),
@@ -234,6 +242,10 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
 
   @override
   void updatePedido() {
-    // TODO: implement updatePedido
+    if (this.mounted) {
+      setState(() {
+        subtotal = widget.pedidoActual.subtotal;
+      });
+    }
   }
 }

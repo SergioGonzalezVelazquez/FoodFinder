@@ -49,7 +49,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     });
 
     List<OpinionRestaurante> opiniones =
-        await conectorBBDD.opiniones(widget.restaurante.id);
+        await ConectorBBDD.opiniones(widget.restaurante.id);
     widget.restaurante.opiniones = opiniones;
 
     setState(() {
@@ -63,7 +63,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     });
 
     List<Producto> productos =
-        await conectorBBDD.productos(widget.restaurante.id);
+        await ConectorBBDD.productos(widget.restaurante.id);
     widget.restaurante.productos = productos;
 
     setState(() {
@@ -77,6 +77,8 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     _controladorTabs = new TabController(vsync: this, length: 3);
     _fetchOpiniones();
     _fetchProductos();
+    print(ConectorBBDD.endpointBBDD +
+                              widget.restaurante.imagenLogo);
 
     _pedidoActual = new Pedido(
         envio: widget.restaurante.envio,
@@ -143,7 +145,8 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
           image: DecorationImage(
               colorFilter: new ColorFilter.mode(
                   Colors.white.withOpacity(0.8), BlendMode.modulate),
-              image: AssetImage(widget.restaurante.imagenFondo),
+              image: NetworkImage(ConectorBBDD.endpointBBDD +
+                              widget.restaurante.imagenFondo),
               fit: BoxFit.cover)),
       child: new Row(children: <Widget>[
         //Información sobre la imagen del fondo
@@ -157,7 +160,8 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               border: new Border.all(color: Colors.white),
               image: DecorationImage(
                   fit: BoxFit.fitHeight,
-                  image: AssetImage(widget.restaurante.imagenLogo))),
+                  image: NetworkImage(ConectorBBDD.endpointBBDD +
+                              widget.restaurante.imagenLogo))),
         ),
         Container(
             padding: const EdgeInsets.only(left: 10.0),

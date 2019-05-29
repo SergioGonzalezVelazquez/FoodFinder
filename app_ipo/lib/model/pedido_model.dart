@@ -1,15 +1,21 @@
 import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/observador_pedido.dart';
+
+//fechas
+import 'package:date_format/date_format.dart';
 
 class Pedido {
   int _numPedido;
   int _idCliente;
+  Restaurante _restaurante;
+  int _estado; //2 = Completado, 0 = Cancelado, 1 = Pendiente
+  String _fecha;
   double _total;
   double _subtotal;
   double _envio;
   double _descuento;
-  String _estado;
 
   //Listado de productos con su cantidad en el pedido
   List<ProductoCantidad> _listadoProductos = new List<ProductoCantidad>();
@@ -20,24 +26,37 @@ class Pedido {
       {int numPedido,
       double envio,
       double descuento,
-      String estado,
-      double importe}) {
+      int estado,
+      double importe,
+      String fecha,
+      Restaurante restaurante,
+      List<ProductoCantidad> listadoProductos}) {
     this._numPedido = numPedido;
     this._envio = envio;
     this._descuento = descuento;
     this._estado = estado;
-    this._subtotal = (importe == null ? 0 : _subtotal);
+    this._restaurante = restaurante;
+    print(fecha);
+    this._fecha = (fecha == null) ? _fechaActual() : fecha;
+    print(fecha);
+
+    this._listadoProductos = (listadoProductos == null
+        ? new List<ProductoCantidad>()
+        : listadoProductos);
+    this._observadores = new List<ObservadorPedido>();
+    this._subtotal = (importe == null ? _calculaImporte() : importe);
     this._calculaTotal();
-    _listadoProductos = new List<ProductoCantidad>();
   }
 
-  String get estado => _estado;
+  int get estado => _estado;
+  String get fecha => _fecha;
   int get numPedido => _numPedido;
   int get idCliente => _idCliente;
   double get descuento => _descuento;
   double get total => _total;
   double get subtotal => _subtotal;
   double get envio => _envio;
+  Restaurante get restaurante => _restaurante;
   List<ProductoCantidad> get listadoProductos => _listadoProductos;
 
   void registrarObservador(ObservadorPedido o) {
@@ -48,8 +67,26 @@ class Pedido {
     _observadores.remove(o);
   }
 
+  double _calculaImporte() {
+    double i = 0;
+    _listadoProductos.forEach((p) => i += p.importe);
+    return i;
+  }
+
   void _calculaTotal() {
     this._total = this._subtotal + this._envio - this._descuento;
+  }
+
+  void cancelarPedido() {
+    if (_estado == 1) {
+      //Si el pedido está en elaboración...
+      _estado = 0;
+    }
+  }
+
+  String _fechaActual() {
+    final todayDate = DateTime.now();
+    return formatDate(todayDate, [dd, '/', mm, '/', yyyy, ' ']);
   }
 
   int numProductos() {
@@ -71,6 +108,7 @@ class Pedido {
     }
     _subtotal += producto.precio;
     this._calculaTotal();
+    _observadores.forEach((o) => o.updatePedido());
   }
 
   void reducirCantidadProducto(Producto producto) {
@@ -83,6 +121,8 @@ class Pedido {
       _subtotal -= producto.precio;
       this._calculaTotal();
     }
+
+    _observadores.forEach((o) => o.updatePedido());
   }
 
   void borrarProducto(ProductoCantidad productoCantidad) {
@@ -94,5 +134,6 @@ class Pedido {
       this._calculaTotal();
     }
     _observadores.forEach((o) => o.removeItem(productoCantidad, index));
+    _observadores.forEach((o) => o.updatePedido());
   }
 }

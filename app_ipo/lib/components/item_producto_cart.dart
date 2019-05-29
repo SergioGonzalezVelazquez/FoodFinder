@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/model/producto_cantidad_model.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
 
 class ItemProductoCart extends StatefulWidget {
   final ProductoCantidad productoCantidad;
-  final VoidCallback removeItem;
 
   Pedido pedidoActual;
   Animation animation;
 
-  ItemProductoCart(this.productoCantidad, this.pedidoActual, this.animation, {this.removeItem});
+  ItemProductoCart(this.productoCantidad, this.pedidoActual, this.animation);
 
   @override
   State<StatefulWidget> createState() {
@@ -66,7 +66,8 @@ class ItemProductoCardState extends State<ItemProductoCart> {
       width: MediaQuery.of(context).size.height / 9,
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage(widget.productoCantidad.producto.imagen),
+            image:  NetworkImage(ConectorBBDD.endpointBBDD +
+                              widget.productoCantidad.producto.imagen),
             fit: BoxFit.cover),
         borderRadius: BorderRadius.circular(35.0),
       ),
@@ -125,7 +126,9 @@ class ItemProductoCardState extends State<ItemProductoCart> {
               ),
               Spacer(),
               InkWell(
-                onTap: widget.removeItem,
+                onTap: (){
+                  widget.pedidoActual.borrarProducto(widget.productoCantidad);
+                },
                 child: Icon(
                   Icons.cancel,
                   color: Color(0xFFD3D3D3),

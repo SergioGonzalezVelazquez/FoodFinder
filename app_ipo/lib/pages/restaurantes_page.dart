@@ -27,7 +27,7 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
       isLoading = true;
     });
 
-    listTodosRestaurantes = await conectorBBDD.restaurantes();
+    listTodosRestaurantes = await ConectorBBDD.restaurantes();
     listFiltroRestaurantes = new List.from(listTodosRestaurantes);
 
     setState(() {

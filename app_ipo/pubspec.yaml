@@ -20,6 +20,9 @@ dependencies:
   #cloud_firestore: ^0.8.2+3
   fluttertoast: ^2.2.3
   http: any
+  date_format: ^1.0.6
+  cached_network_image: ^0.8.0
+  rich_alert: ^0.1.32
   #shared_preferences: ^0.4.3
   #firebase_database: ^3.0.0
   #firebase_storage: ^3.0.0
@@ -51,8 +54,7 @@ flutter:
   assets:
     - images/
     - images/foodCategory/
-    - images/restaurants/
-    - images/products/
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

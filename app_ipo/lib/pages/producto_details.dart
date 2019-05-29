@@ -3,6 +3,7 @@ import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   //Propiedad inmutable
@@ -37,9 +38,8 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
         height: MediaQuery.of(context).size.height / 2.5,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(
-                  widget.producto.imagen,
-                ),
+                image: NetworkImage(
+                    ConectorBBDD.endpointBBDD + widget.producto.imagen),
                 fit: BoxFit.fill)));
   }
 
@@ -104,8 +104,7 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
         onPressed: () {
           print('Has pulsado añadir al pedido');
           print(widget.pedidoActual.total.toString());
-          widget.pedidoActual
-              .insertarProducto(widget.producto);
+          widget.pedidoActual.insertarProducto(widget.producto);
           print(widget.pedidoActual.total.toString());
         },
         child: Text(
@@ -127,8 +126,11 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
       onPressed: () {
         _toggleFavoriteStatus();
       },
-      icon: new Icon(isFavorito ? Icons.favorite : Icons.favorite_border,
-          color: Theme.of(context).primaryColor, size: 34,),
+      icon: new Icon(
+        isFavorito ? Icons.favorite : Icons.favorite_border,
+        color: Theme.of(context).primaryColor,
+        size: 34,
+      ),
     );
   }
 
