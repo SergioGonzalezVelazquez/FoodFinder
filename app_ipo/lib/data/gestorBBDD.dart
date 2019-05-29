@@ -28,28 +28,28 @@ class conectorBBDD {
     }
   }
 
-  static Future<List<ModeloRestaurante>> restaurantes() async {
+  static Future<List<Restaurante>> restaurantes() async {
     final response = await http.get(endpointBBDD + phpRestaurantes);
     List restaurantes = json.decode(response.body);
-    return restaurantes.map((i) => new ModeloRestaurante.fromJson(i)).toList();
+    return restaurantes.map((i) => new Restaurante.fromJson(i)).toList();
   }
 
-  static Future<List<ModeloProducto>> productos(int idRestaurante) async {
+  static Future<List<Producto>> productos(int idRestaurante) async {
     final response = await http.post(endpointBBDD + phpProductos, body: {
       "idRestaurante": idRestaurante.toString(),
     });
     List productos = json.decode(response.body);
-    return productos.map((i) => new ModeloProducto.fromJson(i)).toList();
+    return productos.map((i) => new Producto.fromJson(i)).toList();
   }
 
-  static Future<List<ModeloOpinionRestaurante>> opiniones(
+  static Future<List<OpinionRestaurante>> opiniones(
       int idRestaurante) async {
     final response = await http.post(endpointBBDD + phpOpiniones, body: {
       "idRestaurante": idRestaurante.toString(),
     });
     List opiniones = json.decode(response.body);
     return opiniones
-        .map((i) => new ModeloOpinionRestaurante.fromJson(i))
+        .map((i) => new OpinionRestaurante.fromJson(i))
         .toList();
   }
 }

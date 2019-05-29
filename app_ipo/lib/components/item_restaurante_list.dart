@@ -4,7 +4,7 @@ import 'package:app_ipo/components/star_rating.dart';
 import 'package:app_ipo/pages/restaurant_details.dart';
 
 class ItemRestauranteList extends StatelessWidget {
-  final ModeloRestaurante _restaurante;
+  final Restaurante _restaurante;
 
   ItemRestauranteList(this._restaurante);
 
@@ -73,7 +73,8 @@ class ItemRestauranteList extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
-                    child: Text('(' + _restaurante.numValoraciones + ')'),
+                    child: Text(
+                        '(' + _restaurante.numValoraciones.toString() + ')'),
                   )
                 ],
               ),
@@ -82,9 +83,10 @@ class ItemRestauranteList extends StatelessWidget {
               ),
               new Row(
                 children: <Widget>[
-                  Text('Pedido mínimo: €' + _restaurante.pedidoMinimo),
+                  Text('Pedido mínimo: €' +
+                      _restaurante.pedidoMinimo.toStringAsFixed(2)),
                   Text(
-                    'A domicilio: €' + _restaurante.envio,
+                    'A domicilio: €' + _restaurante.envio.toStringAsFixed(2),
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,11 +1,11 @@
-class ModeloProducto {
+class Producto {
   int _id;
   String _nombre;
   String _imagen;
   String _descripcion;
   double _precio;
 
-  ModeloProducto(
+  Producto(
       {int id,
       String nombre,
       String imagen,
@@ -18,8 +18,8 @@ class ModeloProducto {
     this._precio = precio;
   }
 
-  factory ModeloProducto.fromJson(Map<String, dynamic> jsonData) {
-    return ModeloProducto(
+  factory Producto.fromJson(Map<String, dynamic> jsonData) {
+    return Producto(
       id: int.parse(jsonData['id']),
       nombre: jsonData['nombre'],
       imagen: jsonData['imagen'],
@@ -28,8 +28,14 @@ class ModeloProducto {
     );
   }
 
+  int get id => _id;
   String get nombre => _nombre;
   String get imagen => _imagen;
   String get descripcion => _descripcion;
   double get precio => _precio;
+
+  // Define that two Products are equal if their id are equal
+  bool operator ==(dynamic other) {
+    return (other.id == _id);
+  }
 }

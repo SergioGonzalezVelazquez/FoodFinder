@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/components/listview_foodCategories.dart';
 import 'package:app_ipo/components/listview_restaurants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_ipo/model/restaurante_model.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
 
 class RestaurantesPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
@@ -14,6 +16,32 @@ class RestaurantesPage extends StatefulWidget {
 }
 
 class _RestaurantesPageState extends State<RestaurantesPage> {
+  //Listado de todos los restaurantes recuperados del servidor
+  List<Restaurante> listTodosRestaurantes;
+  //Listado de restaurantes con resultados de la búsqueda
+  List<Restaurante> listFiltroRestaurantes;
+  bool isLoading;
+
+  void _fetchRestaurants() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    listTodosRestaurantes = await conectorBBDD.restaurantes();
+    listFiltroRestaurantes = new List.from(listTodosRestaurantes);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchRestaurants();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -112,8 +140,11 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
             RestaurantTypeList(),
             //Listado de restaurantes según el filtro
             Expanded(
-              child: RestaurantsList(),
-            )
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : RestaurantsList(listTodosRestaurantes))
             //RestaurantsList(),
           ],
         ),

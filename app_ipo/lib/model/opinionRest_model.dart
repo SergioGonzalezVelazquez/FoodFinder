@@ -1,11 +1,11 @@
-class ModeloOpinionRestaurante {
+class OpinionRestaurante {
   int _id;
   String _nombreUser;
   int _valoracion;
   String _comentario;
   String _fecha;
 
-  ModeloOpinionRestaurante(
+  OpinionRestaurante(
       {int id, String nombreUser, String fecha, String comentario, int valoracion}) {
         this._id = id;
     this._nombreUser = nombreUser;
@@ -14,8 +14,8 @@ class ModeloOpinionRestaurante {
     this._valoracion = valoracion;
   }
 
-  factory ModeloOpinionRestaurante.fromJson(Map<String, dynamic> jsonData) {
-    return ModeloOpinionRestaurante(
+  factory OpinionRestaurante.fromJson(Map<String, dynamic> jsonData) {
+    return OpinionRestaurante(
       id: int.parse(jsonData['id']),
       nombreUser: jsonData['nombreUser'],
       comentario: jsonData['comentario'],

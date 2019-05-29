@@ -1,7 +1,7 @@
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
 
-class ModeloRestaurante {
+class Restaurante {
   int _id;
   String _nombre;
   String _imagenLogo;
@@ -15,13 +15,13 @@ class ModeloRestaurante {
   double _descuento;
 
   //Listado de productos
-  List<ModeloProducto> _productos = new List<ModeloProducto>();
+  List<Producto> _productos = new List<Producto>();
 
   //Listado de valoraciones
-  List<ModeloOpinionRestaurante> _opiniones =
-      new List<ModeloOpinionRestaurante>();
+  List<OpinionRestaurante> _opiniones =
+      new List<OpinionRestaurante>();
 
-  ModeloRestaurante(
+  Restaurante(
       {int id,
       String nombre,
       String imagenLogo,
@@ -33,8 +33,8 @@ class ModeloRestaurante {
       double pedidoMinimo,
       double envio,
       double descuento,
-      List<ModeloProducto> productos,
-      List<ModeloOpinionRestaurante> opiniones}) {
+      List<Producto> productos,
+      List<OpinionRestaurante> opiniones}) {
     this._id = id;
     this._nombre = nombre;
     this._imagenLogo = imagenLogo;
@@ -50,8 +50,8 @@ class ModeloRestaurante {
     this._productos = productos;
   }
 
-  factory ModeloRestaurante.fromJson(Map<String, dynamic> jsonData) {
-    return ModeloRestaurante(
+  factory Restaurante.fromJson(Map<String, dynamic> jsonData) {
+    return Restaurante(
       id: int.parse(jsonData['id']),
       nombre: jsonData['nombre'],
       imagenLogo: jsonData['imagenLogo'],
@@ -72,17 +72,17 @@ class ModeloRestaurante {
   String get imagenFondo => _imagenFondo;
   String get categoria => _categoria;
   int get valoracion => _valoracion;
-  String get numValoraciones => _numValoraciones.toString();
+  int get numValoraciones => _numValoraciones;
   String get distancia => _distancia;
-  String get pedidoMinimo => _pedidoMinimo.toStringAsFixed(2);
-  String get envio => _envio.toStringAsFixed(2);
+  double get pedidoMinimo => _pedidoMinimo;
+  double get envio => _envio;
   double get descuento => _descuento;
-  List<ModeloProducto> get productos => _productos;
-  List<ModeloOpinionRestaurante> get opiniones => _opiniones;
+  List<Producto> get productos => _productos;
+  List<OpinionRestaurante> get opiniones => _opiniones;
 
-  void set productos(List<ModeloProducto> products) =>
+  void set productos(List<Producto> products) =>
       this._productos = products;
 
-  void set opiniones(List<ModeloOpinionRestaurante> opinions) =>
+  void set opiniones(List<OpinionRestaurante> opinions) =>
       this._opiniones = opinions;
 }

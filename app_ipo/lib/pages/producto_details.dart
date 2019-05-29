@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/producto_cantidad_model.dart';
+import 'package:app_ipo/model/pedido_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   //Propiedad inmutable
-  final ModeloProducto producto;
+  final Producto producto;
+  Pedido pedidoActual;
+  //Usuario usuario;
 
-  ProductDetailsPage({this.producto});
+  ProductDetailsPage({this.producto, this.pedidoActual});
 
   @override
   State<StatefulWidget> createState() {
@@ -91,6 +95,43 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
     }
   }
 
+  Widget _btnAniadirProducto(BuildContext context) {
+    return Expanded(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+      child: MaterialButton(
+        color: Theme.of(context).primaryColor,
+        onPressed: () {
+          print('Has pulsado añadir al pedido');
+          print(widget.pedidoActual.total.toString());
+          widget.pedidoActual
+              .insertarProducto(widget.producto);
+          print(widget.pedidoActual.total.toString());
+        },
+        child: Text(
+          "Añadir al pedido".toUpperCase(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ));
+  }
+
+  Widget _btnFavorito(BuildContext context) {
+    return IconButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent, // makes highlight invisible to
+      onPressed: () {
+        _toggleFavoriteStatus();
+      },
+      icon: new Icon(isFavorito ? Icons.favorite : Icons.favorite_border,
+          color: Theme.of(context).primaryColor, size: 34,),
+    );
+  }
+
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -117,7 +158,7 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-                height: MediaQuery.of(context).size.height / 13,
+                height: MediaQuery.of(context).size.height / 8,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width / 30,
@@ -127,27 +168,8 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
                 decoration: BoxDecoration(color: Colors.white),
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                        child: MaterialButton(
-                      color: Theme.of(context).primaryColor,
-                      textColor: Colors.black,
-                      elevation: 0.2,
-                      onPressed: () {
-                        print('Has pulsado añadir al pedido');
-                      },
-                      child: new Text('Añadir al pedido'.toUpperCase()),
-                    )),
-                    IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor:
-                          Colors.transparent, // makes highlight invisible to
-                      onPressed: () {
-                        _toggleFavoriteStatus();
-                      },
-                      icon: new Icon(
-                          isFavorito ? Icons.favorite : Icons.favorite_border,
-                          color: Theme.of(context).primaryColor),
-                    ),
+                    _btnAniadirProducto(context),
+                    _btnFavorito(context),
                   ],
                 )),
           )

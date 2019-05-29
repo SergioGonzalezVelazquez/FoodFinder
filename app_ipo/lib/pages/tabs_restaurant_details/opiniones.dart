@@ -3,7 +3,7 @@ import 'package:app_ipo/model/opinionRest_model.dart';
 import 'package:app_ipo/components/item_opinion_list.dart';
 
 class RestaurantOpiniones extends StatefulWidget {
-  final List< ModeloOpinionRestaurante> opiniones;
+  final List< OpinionRestaurante> opiniones;
 
   RestaurantOpiniones({this.opiniones});
 

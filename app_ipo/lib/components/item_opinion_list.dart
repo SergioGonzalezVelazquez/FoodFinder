@@ -4,7 +4,7 @@ import 'package:app_ipo/components/star_rating.dart';
 
 
 class ItemOpinionList extends StatelessWidget {
-  final ModeloOpinionRestaurante _opinion;
+  final OpinionRestaurante _opinion;
 
   ItemOpinionList(this._opinion);
 

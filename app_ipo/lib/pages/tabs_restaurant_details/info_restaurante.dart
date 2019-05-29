@@ -5,7 +5,7 @@ import 'package:app_ipo/model/restaurante_model.dart';
 
 
 class RestaurantInfo extends StatefulWidget {
-  final ModeloRestaurante restaurante;
+  final Restaurante restaurante;
 
   RestaurantInfo({this.restaurante});
 

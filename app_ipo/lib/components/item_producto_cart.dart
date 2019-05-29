@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/pedido_model.dart';
+import 'package:app_ipo/model/producto_cantidad_model.dart';
 
 class ItemProductoCart extends StatefulWidget {
-  final ModeloProducto producto;
-  ItemProductoCart(this.producto);
+  final ProductoCantidad productoCantidad;
+  final VoidCallback removeItem;
+
+  Pedido pedidoActual;
+  Animation animation;
+
+  ItemProductoCart(this.productoCantidad, this.pedidoActual, this.animation, {this.removeItem});
 
   @override
   State<StatefulWidget> createState() {
@@ -13,14 +20,6 @@ class ItemProductoCart extends StatefulWidget {
 }
 
 class ItemProductoCardState extends State<ItemProductoCart> {
-  int cantidad;
-
-  @override
-  void initState() {
-    super.initState();
-    cantidad = 1;
-  }
-
   Widget _selectorCantidad(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height / 9,
@@ -34,19 +33,21 @@ class ItemProductoCardState extends State<ItemProductoCart> {
           InkWell(
               onTap: () {
                 setState(() {
-                  cantidad++;
+                  widget.pedidoActual
+                      .insertarProducto(widget.productoCantidad.producto);
                 });
               },
               child: Icon(Icons.keyboard_arrow_up, color: Color(0xFFD3D3D3))),
           Text(
-            cantidad.toString(),
+            widget.productoCantidad.cantidad.toString(),
             style: TextStyle(fontSize: 18),
           ),
           InkWell(
               onTap: () {
-                if (cantidad > 1) {
+                if (widget.productoCantidad.cantidad > 1) {
                   setState(() {
-                    cantidad--;
+                    widget.pedidoActual.reducirCantidadProducto(
+                        widget.productoCantidad.producto);
                   });
                 }
               },
@@ -65,7 +66,8 @@ class ItemProductoCardState extends State<ItemProductoCart> {
       width: MediaQuery.of(context).size.height / 9,
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage(widget.producto.imagen), fit: BoxFit.cover),
+            image: AssetImage(widget.productoCantidad.producto.imagen),
+            fit: BoxFit.cover),
         borderRadius: BorderRadius.circular(35.0),
       ),
     );
@@ -74,57 +76,63 @@ class ItemProductoCardState extends State<ItemProductoCart> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _selectorCantidad(context),
-            SizedBox(width: 20.0),
-            _imagenProducto(context),
-            SizedBox(width: 20.0),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    widget.producto.nombre,
-                    style:
-                        TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    widget.producto.precio.toStringAsFixed(2) + ' €/ud',
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                  SizedBox(height: 15.0),
-                  Row(
-                    children: <Widget>[
-                      Text('Importe:', style: TextStyle(fontSize: 14.0)),
-                      SizedBox(width: 10),
-                      Text(
-                          (widget.producto.precio * cantidad)
-                                  .toStringAsFixed(2) +
-                              ' €',
-                          style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    ],
-                  )
-                ],
+    return SizeTransition(
+      sizeFactor: widget.animation,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _selectorCantidad(context),
+              SizedBox(width: 20.0),
+              _imagenProducto(context),
+              SizedBox(width: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.productoCantidad.producto.nombre,
+                      style: TextStyle(
+                          fontSize: 14.0, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      widget.productoCantidad.producto.precio
+                              .toStringAsFixed(2) +
+                          ' €/ud',
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    SizedBox(height: 15.0),
+                    Row(
+                      children: <Widget>[
+                        Text('Importe:', style: TextStyle(fontSize: 14.0)),
+                        SizedBox(width: 10),
+                        Text(
+                            (widget.productoCantidad.producto.precio *
+                                        widget.productoCantidad.cantidad)
+                                    .toStringAsFixed(2) +
+                                ' €',
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold)),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            Spacer(),
-            GestureDetector(
-              onTap: () {},
-              child: Icon(
-                Icons.cancel,
-                color: Color(0xFFD3D3D3),
+              Spacer(),
+              InkWell(
+                onTap: widget.removeItem,
+                child: Icon(
+                  Icons.cancel,
+                  color: Color(0xFFD3D3D3),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
+import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/components/item_producto_list.dart';
 
 class RestaurantMenus extends StatefulWidget {
-  final List<ModeloProducto> productos;
+  final List<Producto> productos;
 
-  RestaurantMenus({this.productos});
+  Pedido pedidoActual;
+
+  RestaurantMenus({this.productos, this.pedidoActual});
 
   @override
   State<StatefulWidget> createState() {
@@ -29,8 +32,8 @@ class _RestaurantMenuState extends State<RestaurantMenus> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: widget.productos.length,
-          itemBuilder: (context, int item) =>
-              new ItemProductoList(widget.productos[item]));
+          itemBuilder: (context, int item) => new ItemProductoList(
+              widget.productos[item], widget.pedidoActual));
     }
   }
 }
