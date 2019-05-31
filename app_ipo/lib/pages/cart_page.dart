@@ -39,7 +39,11 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
   Widget _btnPagar() {
     return MaterialButton(
       onPressed: () {
-        Navigator.pushNamed(context, OrderPage.nombreRuta);
+        Route ruta = new MaterialPageRoute(
+            builder: (context) => new OrderPage(
+                  widget.pedidoActual,
+                ));
+        Navigator.push(context, ruta);
       },
       child: Container(
         height: MediaQuery.of(context).size.height / 14,

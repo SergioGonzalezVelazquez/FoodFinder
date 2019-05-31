@@ -18,8 +18,7 @@ class Restaurante {
   List<Producto> _productos = new List<Producto>();
 
   //Listado de valoraciones
-  List<OpinionRestaurante> _opiniones =
-      new List<OpinionRestaurante>();
+  List<OpinionRestaurante> _opiniones = new List<OpinionRestaurante>();
 
   Restaurante(
       {int id,
@@ -80,9 +79,8 @@ class Restaurante {
   List<Producto> get productos => _productos;
   List<OpinionRestaurante> get opiniones => _opiniones;
 
-  void set productos(List<Producto> products) =>
-      this._productos = products;
+  set productos(List<Producto> products) => this._productos = products;
 
-  void set opiniones(List<OpinionRestaurante> opinions) =>
+  set opiniones(List<OpinionRestaurante> opinions) =>
       this._opiniones = opinions;
 }

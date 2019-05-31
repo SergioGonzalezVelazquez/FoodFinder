@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:app_ipo/model/user_model.dart';
@@ -69,7 +70,11 @@ class _LoginPageState extends State<LoginPage> {
     if (usuario != null) {
       //Login correcto
       print('ok ' + usuario.nombre);
-      Navigator.pushReplacementNamed(context, '/home');
+      Route ruta = new MaterialPageRoute(
+          builder: (context) => new RestaurantesPage(
+                usuario,
+              ));
+      Navigator.pushReplacement(context, ruta);
     } else {
       //Login incorrecto
       Fluttertoast.showToast(msg: "Usuario o contraseña incorrectos");
@@ -153,6 +158,28 @@ class _LoginPageState extends State<LoginPage> {
     } else {}
   }
 */
+
+  Widget _logo(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 2.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Image.asset(
+            LoginPage.logo,
+            scale: 3,
+            alignment: Alignment.center,
+          ),
+          Text(
+            'Food Finder',
+            style: new TextStyle(fontSize: 30.0),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -165,8 +192,6 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          // _emailLogin(
-          //   email: _email.text, password: _password.text, context: context);
           print(_emailController.text);
           sign_in(_emailController.text, _passController.text);
           //handleSignIn();
@@ -183,91 +208,84 @@ class _LoginPageState extends State<LoginPage> {
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 2.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Image.asset(
-                    LoginPage.logo,
-                    scale: 3,
-                    alignment: Alignment.center,
-                  ),
-                  Text(
-                    'Food Finder',
-                    style: new TextStyle(fontSize: 30.0),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(top: 12),
-              child: Column(
-                children: <Widget>[
-                  LoginPage.itemCard(context,
-                      hint: 'Correo Electrónico',
-                      icono: Icons.email,
-                      oscureText: false,
-                      tipoTexto: TextInputType.emailAddress,
-                      controller: _emailController),
-                  LoginPage.itemCard(context,
-                      hint: 'Contraseña',
-                      icono: Icons.vpn_key,
-                      oscureText: true,
-                      tipoTexto: TextInputType.text,
-                      controller: _passController),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16, right: 32),
-                      child: Text(
-                        '¿Has olvidado tu contraseña?',
-                        style: TextStyle(color: Colors.grey),
-                      ),
+            _logo(context),
+            loading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor),
                     ),
-                  ),
-                  loginButton,
-                  Expanded(
+                  )
+                : Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(top: 12),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 18.0),
-                          child: FlatButton(
+                        LoginPage.itemCard(context,
+                            hint: 'Correo Electrónico',
+                            icono: Icons.email,
+                            oscureText: false,
+                            tipoTexto: TextInputType.emailAddress,
+                            controller: _emailController),
+                        LoginPage.itemCard(context,
+                            hint: 'Contraseña',
+                            icono: Icons.vpn_key,
+                            oscureText: true,
+                            tipoTexto: TextInputType.text,
+                            controller: _passController),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, right: 32),
                             child: Text(
-                              '¿Aún no tienes cuenta? REGÍSTRATE',
-                              style: TextStyle(
-                                  fontSize: 15.0, fontWeight: FontWeight.bold),
+                              '¿Has olvidado tu contraseña?',
+                              style: TextStyle(color: Colors.grey),
                             ),
-                            textColor: Colors.grey,
-                            color: Colors.transparent,
-                            onPressed: () {
-                              print("Has presionado el botón de registrase");
-                              Navigator.pushNamed(context, '/signup');
-                            },
+                          ),
+                        ),
+                        loginButton,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 18.0),
+                                child: FlatButton(
+                                  child: Text(
+                                    '¿Aún no tienes cuenta? REGÍSTRATE',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  textColor: Colors.grey,
+                                  color: Colors.transparent,
+                                  onPressed: () {
+                                    print(
+                                        "Has presionado el botón de registrase");
+                                    Navigator.pushNamed(context, '/signup');
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: loading ?? true,
+                          child: Center(
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.white.withOpacity(0.9),
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
+                              ),
+                            ),
                           ),
                         )
                       ],
                     ),
-                  ),
-                  Visibility(
-                    visible: loading ?? true,
-                    child: Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        color: Colors.white.withOpacity(0.9),
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                        ),
-                      ),
-                    ),
                   )
-                ],
-              ),
-            )
           ],
         ),
       ),

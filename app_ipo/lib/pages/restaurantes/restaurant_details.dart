@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
 import 'package:app_ipo/model/producto_model.dart';
-import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
 import 'package:app_ipo/pages/cart_page.dart';
-import 'package:app_ipo/components/observador_pedido.dart';
 
 //tabs imports
-import 'package:app_ipo/pages/tabs_restaurant_details/info_restaurante.dart';
-import 'package:app_ipo/pages/tabs_restaurant_details/productos_restaurante.dart';
-import 'package:app_ipo/pages/tabs_restaurant_details/opiniones.dart';
+import 'package:app_ipo/pages/restaurantes/tabs_restaurant_details/info_restaurante.dart';
+import 'package:app_ipo/pages/restaurantes/tabs_restaurant_details/productos_restaurante.dart';
+import 'package:app_ipo/pages/restaurantes/tabs_restaurant_details/opiniones.dart';
 
 //bbdd
 import 'package:app_ipo/data/gestorBBDD.dart';
@@ -39,10 +37,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
   bool isLoadingProducts = false;
   Pedido _pedidoActual;
 
-  void updatePedido(){
-
-  }
-
+ 
   void _fetchOpiniones() async {
     setState(() {
       isLoadingOpinions = true;
@@ -214,6 +209,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
   Widget _tabBar(BuildContext context) {
     return Container(
       child: TabBar(
+        indicatorColor: Theme.of(context).primaryColor,
         tabs: <Widget>[
           new Tab(
             text: "Menús",

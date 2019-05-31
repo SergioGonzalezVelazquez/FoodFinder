@@ -12,6 +12,19 @@ class ProductoCantidad {
         (importe == null ? (_cantidad * _producto.precio) : importe);
   }
 
+  factory ProductoCantidad.fromJson(Map<String, dynamic> jsonData) {
+    return ProductoCantidad(
+      new Producto(
+        id: int.parse(jsonData['idProducto']),
+        nombre: jsonData['nombre'],
+        imagen: jsonData['imagen'],
+        descripcion: jsonData['descripcion'],
+        precio: double.parse(jsonData['precio']),
+      ),
+      int.parse(jsonData['cantidad']),
+    );
+  }
+
   Producto get producto => _producto;
   int get cantidad => _cantidad;
   double get importe => _importe;

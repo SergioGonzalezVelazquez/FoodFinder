@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //my own imports
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/model/producto_cantidad_model.dart';
+import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/components/item_pedido_list.dart';
 import 'package:app_ipo/pages/cart_page.dart';
 
@@ -33,7 +34,13 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
   @override
   Widget _btnVerRestaurante() {
     return MaterialButton(
-      onPressed: () {},
+      onPressed: () {
+        Route ruta = new MaterialPageRoute(
+            builder: (context) => new RestaurantDetailsPage(
+                  restaurante: widget.pedido.restaurante,
+                ));
+        Navigator.push(context, ruta);
+      },
       child: Container(
         height: MediaQuery.of(context).size.height / 14,
         width: MediaQuery.of(context).size.width / 2.7,
@@ -273,6 +280,156 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
     );
   }
 
+  _showAlertRate() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            contentPadding: EdgeInsets.only(top: 10.0),
+            content: Container(
+              width: 300.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(Icons.star_border,
+                              color: Theme.of(context).primaryColor,
+                              size: 30.0),
+                          Icon(Icons.star_border,
+                              color: Theme.of(context).primaryColor,
+                              size: 30.0),
+                          Icon(
+                            Icons.star_border,
+                            color: Theme.of(context).primaryColor,
+                            size: 30.0,
+                          ),
+                          Icon(
+                            Icons.star_border,
+                            color: Theme.of(context).primaryColor,
+                            size: 30.0,
+                          ),
+                          Icon(
+                            Icons.star_border,
+                            color: Theme.of(context).primaryColor,
+                            size: 30.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 4.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Da tu opinión a los demás",
+                        border: InputBorder.none,
+                      ),
+                      maxLines: 8,
+                    ),
+                  ),
+                  InkWell(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(32.0),
+                            bottomRight: Radius.circular(32.0)),
+                      ),
+                      child: Text(
+                        "Escribir una opinión".toUpperCase(),
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _valorarPedido() {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //Titulo y nombre del pedido
+                Text(
+                  '¿Cómo fue tu pedido?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'Su opinión ayuda a otros a encontar restaurantes geniales',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          new Container(
+            height: 1.5,
+            color: Theme.of(context).buttonColor,
+          ),
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(15),
+            child: InkWell(
+              onTap: () {
+                _showAlertRate();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    Icons.rate_review,
+                    size: 28,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'Deja tu valoración',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -312,6 +469,10 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                 height: 25,
               ),
               _resumenPedido(),
+              SizedBox(
+                height: 25,
+              ),
+              _valorarPedido(),
               SizedBox(
                 height: 25,
               ),

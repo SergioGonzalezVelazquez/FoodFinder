@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
-import 'package:app_ipo/pages/restaurant_details.dart';
+import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 
 

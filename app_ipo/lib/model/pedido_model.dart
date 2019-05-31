@@ -36,16 +36,28 @@ class Pedido {
     this._descuento = descuento;
     this._estado = estado;
     this._restaurante = restaurante;
-    print(fecha);
     this._fecha = (fecha == null) ? _fechaActual() : fecha;
-    print(fecha);
 
     this._listadoProductos = (listadoProductos == null
         ? new List<ProductoCantidad>()
         : listadoProductos);
-    this._observadores = new List<ObservadorPedido>();
     this._subtotal = (importe == null ? _calculaImporte() : importe);
     this._calculaTotal();
+    this._observadores = new List<ObservadorPedido>();
+  }
+
+  factory Pedido.fromJson(Map<String, dynamic> jsonData) {
+    var list = jsonData['productos'] as List;
+    List<ProductoCantidad> listadoProductos =
+        list.map((i) => ProductoCantidad.fromJson(i)).toList();
+    return Pedido(
+        numPedido: int.parse(jsonData['numPedido']),
+        estado: int.parse(jsonData['estado']),
+        fecha: jsonData['fecha'],
+        envio: double.parse(jsonData['envio']),
+        descuento: double.parse(jsonData['descuento']),
+        restaurante: Restaurante.fromJson(jsonData['restaurante']),
+        listadoProductos: listadoProductos);
   }
 
   int get estado => _estado;

@@ -5,11 +5,15 @@ import 'package:app_ipo/components/listview_foodCategories.dart';
 import 'package:app_ipo/components/listview_restaurants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
+import 'package:app_ipo/model/user_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:app_ipo/pages/my_drawer.dart';
 
 class RestaurantesPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/restaurantes";
+  User user;
+  RestaurantesPage(this.user);
 
   @override
   State<StatefulWidget> createState() => new _RestaurantesPageState();
@@ -30,9 +34,13 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     listTodosRestaurantes = await ConectorBBDD.restaurantes();
     listFiltroRestaurantes = new List.from(listTodosRestaurantes);
 
-    setState(() {
-      isLoading = false;
-    });
+    if (this.mounted) {
+      /*Si no comprobamos esto, puede saltar excepción si cambiamos
+       de página antes de que la descarga se haya completado*/
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -40,6 +48,7 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     // TODO: implement initState
     super.initState();
     _fetchRestaurants();
+    print('App iniciada por ' + widget.user.email);
   }
 
   @override
@@ -47,6 +56,12 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      appBar: new AppBar(
+        //elevation: 0.0, //Quitar sombra de la appBar
+        title: new Text('Food Finder'),
+        centerTitle: true,
+      ),
+      drawer: MyDrawer(widget.user, index: MyDrawer.indexRestaurantes),
       body: new Container(
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,7 +157,10 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
             Expanded(
                 child: isLoading
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).primaryColor),
+                        ),
                       )
                     : RestaurantsList(listTodosRestaurantes))
             //RestaurantsList(),
