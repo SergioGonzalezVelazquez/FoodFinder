@@ -4,7 +4,6 @@ import 'package:app_ipo/components/star_rating.dart';
 import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 
-
 class ItemRestauranteList extends StatelessWidget {
   final Restaurante _restaurante;
 
@@ -12,12 +11,8 @@ class ItemRestauranteList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Column(
       children: <Widget>[
-        new Divider(
-          height: 20.0,
-        ),
         new ListTile(
           //Logo del restaurante y distancia (izq)
           leading: Container(
@@ -105,7 +100,10 @@ class ItemRestauranteList extends StatelessWidget {
                     ));
             Navigator.push(context, ruta);
           },
-        )
+        ),
+        new Divider(
+          height: 15.0,
+        ),
       ],
     );
   }

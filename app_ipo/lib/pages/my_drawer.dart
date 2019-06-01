@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
 import 'package:app_ipo/pages/pedidos/pedidos_page.dart';
-import 'package:app_ipo/pages/perfil_page.dart';
-import 'package:app_ipo/pages/configuracion_page.dart';
+import 'package:app_ipo/pages/favoritos_page.dart';
+import 'package:app_ipo/pages/configuracion/configuracion_page.dart';
 import 'package:app_ipo/model/user_model.dart';
+import 'package:app_ipo/components/observador_usuario.dart';
 
 class MyDrawer extends StatefulWidget {
   static int indexRestaurantes = 0;
@@ -19,8 +20,10 @@ class MyDrawer extends StatefulWidget {
   State<StatefulWidget> createState() => new _MyDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _MyDrawerState extends State<MyDrawer> implements ObservadorUsuario {
   int _selectDrawerItem;
+  String _nombreUser;
+  String _emailUser;
 
   @override
   void initState() {
@@ -30,6 +33,15 @@ class _MyDrawerState extends State<MyDrawer> {
     } else {
       _selectDrawerItem = 0;
     }
+    widget.user.registrarObservador(this);
+    _nombreUser = widget.user.nombre;
+    _emailUser = widget.user.email;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.user.eliminarObservador(this);
   }
 
   /* Función que devuelve el widget que se tiene que mostrar en la pantalla dado un valor seleccionado.*/
@@ -49,7 +61,7 @@ class _MyDrawerState extends State<MyDrawer> {
         break;
       case 2:
         return new MaterialPageRoute(
-            builder: (context) => new PerfilPage(
+            builder: (context) => new FavoritosPage(
                   widget.user,
                 )); //Restaurantes
         break;
@@ -68,7 +80,7 @@ class _MyDrawerState extends State<MyDrawer> {
         title: new Text('Desconectar'),
         onTap: () {
           setState(() {
-           _selectDrawerItem = MyDrawer.indexDesconectar; 
+            _selectDrawerItem = MyDrawer.indexDesconectar;
           });
           Navigator.pushNamed(context, '/');
         });
@@ -92,19 +104,23 @@ class _MyDrawerState extends State<MyDrawer> {
   ListView _construirListView(BuildContext context) {
     return new ListView(children: <Widget>[
       new UserAccountsDrawerHeader(
-        accountName: new Text(widget.user.nombre),
-        accountEmail: new Text(widget.user.email),
+        accountName: new Text(_nombreUser),
+        accountEmail: new Text(_emailUser),
         currentAccountPicture: new CircleAvatar(
           backgroundImage: AssetImage('images/user.png'),
           backgroundColor: Colors.white,
           //child: new Text("S",style: new TextStyle( color: Colors.white)),
         ),
       ),
-      _construirItem(context, Icons.restaurant, "Restaurantes", pos: MyDrawer.indexRestaurantes),
-      _construirItem(context, Icons.receipt, "Pedidos", pos: MyDrawer.indexPedidos),
-      _construirItem(context, Icons.person, "Perfil", pos: MyDrawer.indexPerfil),
+      _construirItem(context, Icons.restaurant, "Restaurantes",
+          pos: MyDrawer.indexRestaurantes),
+      _construirItem(context, Icons.receipt, "Pedidos",
+          pos: MyDrawer.indexPedidos),
+      _construirItem(context, Icons.favorite, "Favoritos",
+          pos: MyDrawer.indexPerfil),
       new Divider(),
-      _construirItem(context, Icons.settings, "Configuración", pos: MyDrawer.indexConfiguracion),
+      _construirItem(context, Icons.settings, "Configuración",
+          pos: MyDrawer.indexConfiguracion),
       _desconectarItem(),
       new AboutListTile(
         child: new Text("Acerca De"),
@@ -118,9 +134,18 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Drawer(
       child: _construirListView(context),
     );
+  }
+
+  @override
+  void updateUsuario() {
+    if (this.mounted) {
+      setState(() {
+        _nombreUser = widget.user.nombre;
+        _emailUser = widget.user.email;
+      });
+    }
   }
 }

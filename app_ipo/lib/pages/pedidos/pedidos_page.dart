@@ -18,7 +18,6 @@ class PedidosPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _PedidosPageState();
   }
 }
@@ -94,7 +93,6 @@ class _PedidosPageState extends State<PedidosPage>
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: new AppBar(
           //elevation: 0.0, //Quitar sombra de la appBar

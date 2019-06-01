@@ -12,7 +12,6 @@ class RestaurantMenus extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _RestaurantMenuState();
   }
 }
@@ -21,7 +20,6 @@ class _RestaurantMenuState extends State<RestaurantMenus> {
   @override
   Widget build(BuildContext context) {
     if ((widget.productos == null) || widget.productos.length == 0) {
-// TODO: implement build
       return new Container(
         child: new Center(
           child: new Text("No hay productos disponibles"),

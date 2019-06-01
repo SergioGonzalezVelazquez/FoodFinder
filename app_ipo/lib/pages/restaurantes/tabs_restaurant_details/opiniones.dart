@@ -9,7 +9,6 @@ class RestaurantOpiniones extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _RestaurantOpinionesState();
   }
 }
@@ -18,7 +17,6 @@ class _RestaurantOpinionesState extends State<RestaurantOpiniones> {
   @override
   Widget build(BuildContext context) {
     if (widget.opiniones != null) {
-// TODO: implement build
       return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,

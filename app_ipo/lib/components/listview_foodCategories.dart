@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class RestaurantTypeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       height: 100,
       child: ListView(
@@ -43,14 +42,12 @@ class _RestaurantTypeState extends State<RestaurantTypeItem> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selected = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     // title: Image.asset(image),
 
     return Card(

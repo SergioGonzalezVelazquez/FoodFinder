@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:app_ipo/model/user_model.dart';
 
 class LoginPage extends StatefulWidget {
@@ -182,8 +179,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     final loginButton = Container(
       width: MediaQuery.of(context).size.width / 1.2,
       padding: EdgeInsets.symmetric(vertical: 16.0),

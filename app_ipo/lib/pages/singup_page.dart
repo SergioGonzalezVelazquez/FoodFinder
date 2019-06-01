@@ -11,7 +11,6 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(

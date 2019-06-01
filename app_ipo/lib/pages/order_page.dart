@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/pedido_model.dart';
-import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
 
 //alert dialog
 import 'package:rich_alert/rich_alert.dart';
@@ -15,7 +14,6 @@ class OrderPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _OrderPageState();
   }
 }
@@ -429,7 +427,6 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(

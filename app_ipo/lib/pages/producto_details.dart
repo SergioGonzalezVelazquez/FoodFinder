@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
-import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_ipo/pages/cart_page.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -15,7 +15,6 @@ class ProductDetailsPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _ProductDetailsState();
   }
 }
@@ -103,9 +102,9 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
         color: Theme.of(context).primaryColor,
         onPressed: () {
           print('Has pulsado añadir al pedido');
-          print(widget.pedidoActual.total.toString());
-          widget.pedidoActual.insertarProducto(widget.producto);
-          print(widget.pedidoActual.total.toString());
+          setState(() {
+            widget.pedidoActual.insertarProducto(widget.producto);
+          });
         },
         child: Text(
           "Añadir al pedido".toUpperCase(),
@@ -135,10 +134,16 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("Prueba"),
+        title: new Text(widget.producto.nombre),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor,
+        ),
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        actions: <Widget>[
+          CartPage.cestaCompraBar(context, widget.pedidoActual)
+        ],
       ),
       body: new Column(
         children: <Widget>[

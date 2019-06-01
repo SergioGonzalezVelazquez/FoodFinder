@@ -12,7 +12,6 @@ class ItemProductoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Column(
       children: <Widget>[
         new Divider(
@@ -50,7 +49,6 @@ class ItemProductoList extends StatelessWidget {
 
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
-            print('Has pulsado:' + _producto.nombre);
             Route ruta = new MaterialPageRoute(
                 builder: (context) => new ProductDetailsPage(
                       producto: _producto,

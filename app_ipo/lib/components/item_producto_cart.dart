@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
@@ -14,7 +13,6 @@ class ItemProductoCart extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return ItemProductoCardState();
   }
 }
@@ -76,7 +74,6 @@ class ItemProductoCardState extends State<ItemProductoCart> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SizeTransition(
       sizeFactor: widget.animation,
       child: Card(

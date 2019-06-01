@@ -10,10 +10,51 @@ class CartPage extends StatefulWidget {
   static const nombreRuta = "/cartPage";
   Pedido pedidoActual;
 
+  static Widget cestaCompraBar(BuildContext context, Pedido pedido) {
+    return InkWell(
+      onTap: () {
+        Route ruta = new MaterialPageRoute(
+            builder: (context) => new CartPage(
+                  pedidoActual: pedido,
+                ));
+        Navigator.push(context, ruta);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Card(
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: <Widget>[
+                new Icon(
+                  Icons.shopping_basket,
+                  color: Theme.of(context).bottomAppBarColor,
+                  size: 18,
+                ),
+                SizedBox(width: 5),
+                new Text(
+                  (pedido.numProductos() == 0)
+                      ? '0'
+                      : (pedido.numProductos().toString() +
+                          ' | €' +
+                          pedido.total.toStringAsFixed(2)),
+                  style: TextStyle(
+                      color: Theme.of(context).bottomAppBarColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   CartPage({this.pedidoActual});
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _CartPageState();
   }
 }
@@ -221,6 +262,10 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
       appBar: AppBar(
         title: Text('Mi carrito'),
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor,
+        ),
+        backgroundColor: Theme.of(context).bottomAppBarColor,
       ),
       body: (widget.pedidoActual.listadoProductos.length > 0)
           ? _vistaCesta()
@@ -233,7 +278,6 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
 
   @override
   void removeItem(ProductoCantidad removedItem, int removeIndex) {
-    // TODO: implement removeItem
     // This builder is just so that the animation has something
     // to work with before it disappears from view since the original
     // has already been deleted.

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/pages/login_page.dart';
 import 'package:app_ipo/pages/singup_page.dart';
-import 'package:app_ipo/pages/configuracion_page.dart';
-import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
-import 'package:app_ipo/pages/pedidos/pedidos_page.dart';
-import 'package:app_ipo/pages/perfil_page.dart';
-import 'package:app_ipo/pages/order_page.dart';
 import 'package:app_ipo/pages/cart_page.dart';
 
 /**

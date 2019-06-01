@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 
@@ -11,7 +9,6 @@ class RestaurantInfo extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _RestaurantInfoPage();
   }
 }
@@ -44,7 +41,6 @@ class _RestaurantInfoPage extends State<RestaurantInfo> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new SingleChildScrollView(
       child: ConstrainedBox(
           constraints: new BoxConstraints(),

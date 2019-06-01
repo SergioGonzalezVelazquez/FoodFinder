@@ -8,7 +8,6 @@ class PedidosList extends StatefulWidget {
   PedidosList(this.listPedidos);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _PedidosListState();
   }
 }
@@ -16,7 +15,6 @@ class PedidosList extends StatefulWidget {
 class _PedidosListState extends State<PedidosList> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -70,14 +68,18 @@ class _PedidosListState extends State<PedidosList> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (widget.listPedidos.length == 0)
         ? _sinPedidos()
-        : new ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: widget.listPedidos.length,
-            itemBuilder: (context, int item) =>
-                new ItemPedidoList(widget.listPedidos[item]));
+        : (new Column(children: <Widget>[
+            SizedBox(
+              height: 15,
+            ),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: widget.listPedidos.length,
+                itemBuilder: (context, int item) =>
+                    new ItemPedidoList(widget.listPedidos[item]))
+          ]));
   }
 }

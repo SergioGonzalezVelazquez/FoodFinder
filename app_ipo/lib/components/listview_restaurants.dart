@@ -8,7 +8,6 @@ class RestaurantsList extends StatefulWidget {
   RestaurantsList(this.listRestaurantes);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _RestaurantsListState();
   }
 }
@@ -16,14 +15,12 @@ class RestaurantsList extends StatefulWidget {
 class _RestaurantsListState extends State<RestaurantsList> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Column(
       children: <Widget>[
         //Barra con el número de resturantes encontrados

@@ -24,20 +24,31 @@ class RestaurantDetailsPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _RestaurantDetailsState();
   }
 }
 
 class _RestaurantDetailsState extends State<RestaurantDetailsPage>
-    with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin {
   @override
   TabController _controladorTabs;
   bool isLoadingOpinions = false;
   bool isLoadingProducts = false;
   Pedido _pedidoActual;
 
- 
+  void initState() {
+    super.initState();
+
+    _controladorTabs = new TabController(vsync: this, length: 3);
+    _fetchOpiniones();
+    _fetchProductos();
+    print(ConectorBBDD.endpointBBDD + widget.restaurante.imagenLogo);
+
+    _pedidoActual = new Pedido(
+        envio: widget.restaurante.envio,
+        descuento: widget.restaurante.descuento);
+  }
+
   void _fetchOpiniones() async {
     setState(() {
       isLoadingOpinions = true;
@@ -66,18 +77,101 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     });
   }
 
-  void initState() {
-    super.initState();
+  Widget _backDialog() {
+    return new AlertDialog(
+      title: new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            '¿Estás seguro de que quieres volver?',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Perderás los datos del pedido seleccionado y todo lo que hayas añadido al carrito',
+            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+          ),
+          SizedBox(height: 30),
+          new MaterialButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 14,
+              width: double.infinity,
 
-    _controladorTabs = new TabController(vsync: this, length: 3);
-    _fetchOpiniones();
-    _fetchProductos();
-    print(ConectorBBDD.endpointBBDD +
-                              widget.restaurante.imagenLogo);
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              // width: double.infinity,
+              child: Center(
+                child: Text(
+                  "Cancelar".toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          new MaterialButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 14,
+              // width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).bottomAppBarColor,
+                  border: new Border.all(
+                      width: 2.5, color: Theme.of(context).primaryColor)),
+              child: Center(
+                child: Text(
+                  "Estoy seguro".toUpperCase(),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    _pedidoActual = new Pedido(
-        envio: widget.restaurante.envio,
-        descuento: widget.restaurante.descuento);
+  Future<bool> _onBackPressed() {
+    if (_pedidoActual.numProductos() > 0) {
+      return showDialog(
+              context: context, builder: (context) => _backDialog()) ??
+          false;
+    } else {
+      return Future.value(true);
+    }
+  }
+
+  Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {
+    return new Container(
+      padding: EdgeInsets.all(5.0),
+      alignment: FractionalOffset.center,
+      decoration: new BoxDecoration(
+        color: bgColor,
+        borderRadius: new BorderRadius.all(const Radius.circular(10.0)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: const Color(0xFF696969),
+            offset: Offset(1.0, 6.0),
+            blurRadius: 0.001,
+          ),
+        ],
+      ),
+      child: Text(
+        buttonLabel,
+        style: new TextStyle(
+            color: textColor, fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
+    );
   }
 
   Widget _buildAppBar(BuildContext context, Pedido pedido) {
@@ -88,47 +182,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
         color: Theme.of(context).primaryColor,
       ),
       backgroundColor: Theme.of(context).bottomAppBarColor,
-      actions: <Widget>[
-        InkWell(
-          onTap: () {
-            Route ruta = new MaterialPageRoute(
-                builder: (context) => new CartPage(
-                      pedidoActual: _pedidoActual,
-                    ));
-            Navigator.push(context, ruta);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Card(
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: <Widget>[
-                    new Icon(
-                      Icons.shopping_basket,
-                      color: Theme.of(context).bottomAppBarColor,
-                      size: 18,
-                    ),
-                    SizedBox(width: 5),
-                    new Text(
-                      (_pedidoActual.numProductos() == 0)
-                          ? '0'
-                          : (_pedidoActual.numProductos().toString() +
-                              ' | €' +
-                              _pedidoActual.total.toStringAsFixed(2)),
-                      style: TextStyle(
-                          color: Theme.of(context).bottomAppBarColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+      actions: <Widget>[CartPage.cestaCompraBar(context, pedido)],
     );
   }
 
@@ -140,8 +194,8 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
           image: DecorationImage(
               colorFilter: new ColorFilter.mode(
                   Colors.white.withOpacity(0.8), BlendMode.modulate),
-              image: NetworkImage(ConectorBBDD.endpointBBDD +
-                              widget.restaurante.imagenFondo),
+              image: NetworkImage(
+                  ConectorBBDD.endpointBBDD + widget.restaurante.imagenFondo),
               fit: BoxFit.cover)),
       child: new Row(children: <Widget>[
         //Información sobre la imagen del fondo
@@ -156,7 +210,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               image: DecorationImage(
                   fit: BoxFit.fitHeight,
                   image: NetworkImage(ConectorBBDD.endpointBBDD +
-                              widget.restaurante.imagenLogo))),
+                      widget.restaurante.imagenLogo))),
         ),
         Container(
             padding: const EdgeInsets.only(left: 10.0),
@@ -235,7 +289,10 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               ? new Center(
                   child: CircularProgressIndicator(),
                 )
-              : new RestaurantMenus(productos: widget.restaurante.productos, pedidoActual: _pedidoActual,),
+              : new RestaurantMenus(
+                  productos: widget.restaurante.productos,
+                  pedidoActual: _pedidoActual,
+                ),
           isLoadingOpinions
               ? new Center(
                   child: CircularProgressIndicator(),
@@ -249,17 +306,19 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: _buildAppBar(context, _pedidoActual),
-      body: new Container(
-        child: new Column(
-          children: <Widget>[
-            //Barra superior con imagen de fondo e informacion del restaurante
-            _infoRestaurante(context),
-            _tabBar(context),
-            _tabBarView(context),
-          ],
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        appBar: _buildAppBar(context, _pedidoActual),
+        body: new Container(
+          child: new Column(
+            children: <Widget>[
+              //Barra superior con imagen de fondo e informacion del restaurante
+              _infoRestaurante(context),
+              _tabBar(context),
+              _tabBarView(context),
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,6 @@ class PedidoDetailsPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _PedidoDetailsState();
   }
 }
@@ -386,7 +385,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                   height: 5,
                 ),
                 Text(
-                  'Su opinión ayuda a otros a encontar restaurantes geniales',
+                  'Su opinión ayuda a otros a encontrar restaurantes geniales',
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -431,7 +430,6 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Detalles del pedido'),

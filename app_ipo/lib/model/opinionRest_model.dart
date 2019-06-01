@@ -23,6 +23,7 @@ class OpinionRestaurante {
       valoracion: int.parse(jsonData['valoracion']),
     );
   }
+  int get id => _id;
   String get nombreUser => _nombreUser;
   String get fecha => _fecha;
   String get comentario => _comentario;
