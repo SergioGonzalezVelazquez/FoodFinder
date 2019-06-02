@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:app_ipo/model/direccion_model.dart';
 import 'package:app_ipo/model/user_model.dart';
-import 'package:app_ipo/pages/configuracion/direccion_nueva_page.dart';
 import 'package:app_ipo/components/item_direccion_list.dart';
+import 'package:app_ipo/pages/configuracion/direccion_nueva_page.dart';
 
-class DireccionesPage extends StatefulWidget {
+class DireccionesList extends StatefulWidget {
+  List<Direccion> listDirecciones = List();
   User user;
-  DireccionesPage(this.user);
 
+  DireccionesList(this.listDirecciones, this.user);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _DireccionesPageState();
+    return _DireccionesListState();
   }
 }
 
-class _DireccionesPageState extends State<DireccionesPage> {
+class _DireccionesListState extends State<DireccionesList> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Widget _listadoDirecciones(BuildContext context) {
-    return new Column(children: <Widget>[
-      SizedBox(
-        height: 5,
-      ),
-      ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: widget.user.direcciones.length,
-          itemBuilder: (context, int item) =>
-              new ItemDireccionList(widget.user.direcciones[item]))
-    ]);
   }
 
   Widget _sinDirecciones(BuildContext context) {
@@ -88,18 +75,18 @@ class _DireccionesPageState extends State<DireccionesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: new AppBar(
-          //elevation: 0.0, //Quitar sombra de la appBar
-          title: new Text('Libreta de direcciones'),
-          centerTitle: true,
-          iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor,
-          ),
-          backgroundColor: Theme.of(context).bottomAppBarColor,
-        ),
-        body: (widget.user.direcciones.length == 0)
-            ? _sinDirecciones(context)
-            : _listadoDirecciones(context));
+    return (widget.listDirecciones.length == 0)
+        ? _sinDirecciones(context)
+        : (new Column(children: <Widget>[
+            SizedBox(
+              height: 15,
+            ),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: widget.listDirecciones.length,
+                itemBuilder: (context, int item) =>
+                    new ItemDireccionList(widget.listDirecciones[item]))
+          ]));
   }
 }

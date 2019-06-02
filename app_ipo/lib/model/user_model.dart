@@ -1,7 +1,7 @@
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/model/producto_model.dart';
-import 'package:app_ipo/model/direcciones_model.dart';
+import 'package:app_ipo/model/direccion_model.dart';
 import 'package:app_ipo/components/observador_usuario.dart';
 
 class User {
@@ -39,8 +39,17 @@ class User {
   }
 
   factory User.fromJson(Map<String, dynamic> jsonData) {
+    var listPlatosFavs = jsonData['platosFavs'] as List;
+    List<Producto> platosFavs =
+        listPlatosFavs.map((i) => Producto.fromJson(i)).toList();
+
+    var listRestaurantesFavs = jsonData['restaurantesFavs'] as List;
+    List<Restaurante> restaurantesFavs =
+        listRestaurantesFavs.map((i) => Restaurante.fromJson(i)).toList();
+
     return User(int.parse(jsonData['id']), jsonData['nombre'],
-        jsonData['email'], jsonData['password']);
+        jsonData['email'], jsonData['password'],
+        platosFavs: platosFavs, restaurantesFavs: restaurantesFavs);
   }
 
   void registrarObservador(ObservadorUsuario o) {
@@ -66,10 +75,25 @@ class User {
   set password(String password) => _password;
   set telefono(String telefono) => _telefono;
   set pedidos(List<Pedido> pedidos) => this._historialPedidos = pedidos;
-  set platosFavs(List<Producto> platosFavs) => this._platosFavs = platosFavs;
-  set restauranteFavs(List<Restaurante> restaurantesFavs) =>
-      this._restaurantesFavs = restaurantesFavs;
 
+  void insertarDireccion(Direccion d) {
+    this._direcciones.add(d);
+  }
+
+  /*
+  void insertarPlato(String p) {
+    this._idPlatosFavs.add(p);
+  }
+
+  void insertarPedido(Pedido p) {
+    this._historialPedidos.add(p);
+  }
+
+  void insertarRestauranteFav(String r) {
+    this._idRestaurantesFavs.add(r);
+  }
+
+*/
   void updateUser(
       String nombre, String email, String password, String telefono) {
     _nombre = nombre;

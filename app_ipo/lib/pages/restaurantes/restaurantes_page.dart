@@ -53,13 +53,6 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _fetchRestaurants();
   }
-/*
-  bool get _changecolor {
-    return _scrollController.hasClients &&
-        _scrollController.offset >
-            ((MediaQuery.of(context).size.height / 2.5) - kToolbarHeight);
-  }
-  */
 
   bool get _changecolor {
     if (_getAppBarCollapsePercent() == 1)
@@ -94,6 +87,7 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Container(
+            color: Colors.black38,
             child: Column(
               children: <Widget>[
                 Align(

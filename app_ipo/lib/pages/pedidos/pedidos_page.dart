@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/components/item_pedido_list.dart';
 import 'package:app_ipo/model/user_model.dart';
-import 'package:app_ipo/components/listview_pedidos.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/pages/my_drawer.dart';
 
@@ -41,6 +40,13 @@ class _PedidosPageState extends State<PedidosPage>
     _fetchPedidos();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _tabController.dispose();
+  }
+
   void _fetchPedidos() async {
     setState(() {
       isLoading = true;
@@ -67,51 +73,112 @@ class _PedidosPageState extends State<PedidosPage>
         : listPedidosHistorial.add(pedido));
   }
 
-  Widget _listadoPedidos() {
-    return Expanded(
-      child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: listPedidosGlobal.length,
-          itemBuilder: (context, int item) =>
-              new ItemPedidoList(listPedidosGlobal[item])),
+  Widget _listadoPedidos(BuildContext context, List<Pedido> pedidos,
+      String label, String descripcion) {
+    return (pedidos.length == 0)
+        ? _sinPedidos(context, label, descripcion)
+        : (new Column(children: <Widget>[
+            SizedBox(
+              height: 15,
+            ),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: pedidos.length,
+                itemBuilder: (context, int item) =>
+                    new ItemPedidoList(pedidos[item]))
+          ]));
+  }
+
+  Widget _sinPedidos(BuildContext context, String label, String descripcion) {
+    return Container(
+      margin: EdgeInsets.all(25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+              width: 90.0,
+              height: 90.0,
+              decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: new AssetImage('images/shopping_basket.png')))),
+          SizedBox(height: 16),
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          Text(
+            descripcion,
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(height: 40),
+          RaisedButton(
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Center(
+              child: Text(
+                "Buscar restaurantes",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _vistaPedidos() {
+  Widget _vistaPedidos(BuildContext context) {
     //Se ha producido un error de conexión con el servidor
     if (listPedidosGlobal == null) {
       print('Error con el servidor');
       return ConectorBBDD.errorServidor();
     } else {
       return new TabBarView(controller: _tabController, children: <Widget>[
-        PedidosList(listPedidosProgreso),
-        PedidosList(listPedidosHistorial),
+        _listadoPedidos(
+            context,
+            listPedidosProgreso,
+            'Haz un pedido ahora mismo',
+            'Cuando tenga un pedido en curso aparecerá aquí para que puedas visualizar su estado y/o cancelarlo '),
+        _listadoPedidos(context, listPedidosHistorial, 'Haz tu primer pedido',
+            'Cuando hayas hecho un pedido te aparecerá aquí toda la información del mismo para que puedas repetirlo en futuras ocasiones'),
       ]);
     }
+  }
+
+  Widget _builAppBar() {
+    return new AppBar(
+      //elevation: 0.0, //Quitar sombra de la appBar
+      title: new Text('Mis pedidos'),
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Theme.of(context).primaryColor,
+      ),
+      backgroundColor: Theme.of(context).bottomAppBarColor,
+      bottom: new TabBar(
+        indicatorColor: Theme.of(context).primaryColor,
+        labelColor: Theme.of(context).primaryColor,
+        controller: _tabController,
+        tabs: <Widget>[
+          new Tab(text: 'En progreso'),
+          new Tab(text: 'Historial'),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-          //elevation: 0.0, //Quitar sombra de la appBar
-          title: new Text('Mis pedidos'),
-          centerTitle: true,
-          iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor,
-          ),
-          backgroundColor: Theme.of(context).bottomAppBarColor,
-          bottom: new TabBar(
-            indicatorColor: Theme.of(context).primaryColor,
-            labelColor: Theme.of(context).primaryColor,
-            controller: _tabController,
-            tabs: <Widget>[
-              new Tab(text: 'En progreso'),
-              new Tab(text: 'Historial'),
-            ],
-          ),
-        ),
+        appBar: _builAppBar(),
         drawer: MyDrawer(widget.user, index: MyDrawer.indexPedidos),
         body: (isLoading)
             ? Center(
@@ -120,6 +187,6 @@ class _PedidosPageState extends State<PedidosPage>
                       Theme.of(context).primaryColor),
                 ),
               )
-            : _vistaPedidos());
+            : _vistaPedidos(context));
   }
 }

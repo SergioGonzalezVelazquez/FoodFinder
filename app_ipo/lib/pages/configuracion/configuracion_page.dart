@@ -32,13 +32,12 @@ class SettingsPage extends StatelessWidget {
             SizedBox(height: 20),
             _itemConfiguracion(
                 context, Icons.person, 'Información de la cuenta', 0),
-            _itemConfiguracion(context, Icons.payment, 'Métodos de pago', 1),
             _itemConfiguracion(
-                context, Icons.card_giftcard, 'Crédito de la cuenta', 2),
+                context, Icons.card_giftcard, 'Crédito de la cuenta', 1),
             _itemConfiguracion(
-                context, Icons.location_on, 'Direcciones de reparto', 3),
+                context, Icons.location_on, 'Direcciones de reparto', 2),
             _itemConfiguracion(context, Icons.notifications,
-                'Preferencias de notificación', 4),
+                'Preferencias de notificación', 3),
             SizedBox(height: 40),
             Text(
               'General',
@@ -46,7 +45,7 @@ class SettingsPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             _itemConfiguracion(
-                context, Icons.format_align_left, 'Condiciones legales', 5),
+                context, Icons.format_align_left, 'Condiciones legales', 4),
           ],
         ));
   }
@@ -59,23 +58,19 @@ class SettingsPage extends StatelessWidget {
         ruta = new MaterialPageRoute(
             builder: (context) => new InfoCuentaPage(user));
         break;
-      case 1: //Métodos de pago
-        ruta = new MaterialPageRoute(
-            builder: (context) => new InfoCuentaPage(user));
-        break;
-      case 2: //Crédito de la cuenta
+      case 1: //Crédito de la cuenta
         ruta = new MaterialPageRoute(
             builder: (context) => new CreditoCuentaPage());
         break;
-      case 3: //Direcciones de reparto
+      case 2: //Direcciones de reparto
         ruta = new MaterialPageRoute(
             builder: (context) => new DireccionesPage(user));
         break;
-      case 4: //Preferencias de notificación
+      case 3: //Preferencias de notificación
         ruta = new MaterialPageRoute(
             builder: (context) => new NotificacionesPage());
         break;
-      case 5: //Condiciones legales
+      case 4: //Condiciones legales
         ruta = new MaterialPageRoute(
             builder: (context) => new InfoCuentaPage(user));
         break;

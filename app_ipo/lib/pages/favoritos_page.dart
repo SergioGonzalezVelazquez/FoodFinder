@@ -1,33 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/user_model.dart';
+import 'package:app_ipo/model/restaurante_model.dart';
+import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/pages/my_drawer.dart';
+import 'package:app_ipo/components/item_restaurante_favorito.dart';
+import 'package:app_ipo/data/gestorBBDD.dart';
 
-
-class FavoritosPage extends StatelessWidget {
-  //Variable estática que se utiliza en routes.dart
-  static const nombreRuta = "/favoritos";
+class FavoritosPage extends StatefulWidget {
   User user;
 
   FavoritosPage(this.user);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        //elevation: 0.0, //Quitar sombra de la appBar
-        title: new Text('Favoritos'),
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor,
-        ),
-        backgroundColor: Theme.of(context).bottomAppBarColor,
+  State<StatefulWidget> createState() => _FavoritosPageState();
+}
+
+class _FavoritosPageState extends State<FavoritosPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  List<Restaurante> listRestaurantes;
+  List<Producto> listProductos;
+
+  @override
+  void initState() {
+    _tabController = new TabController(
+      length: 2,
+      vsync: this,
+    );
+    super.initState();
+    listRestaurantes = widget.user.restauranteFavs;
+    listProductos = widget.user.platosFavs;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  @override
+  Widget _builAppBar(BuildContext context) {
+    return new AppBar(
+      //elevation: 0.0, //Quitar sombra de la appBar
+      title: new Text('Favoritos'),
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Theme.of(context).primaryColor,
       ),
-      drawer: MyDrawer(user, index: MyDrawer.indexPerfil),
-      body: new Container(
-        child: new Center(
-          child: new Text("Widget de favoritos..."),
-        ),
+      backgroundColor: Theme.of(context).bottomAppBarColor,
+      bottom: new TabBar(
+        indicatorColor: Theme.of(context).primaryColor,
+        labelColor: Theme.of(context).primaryColor,
+        controller: _tabController,
+        tabs: <Widget>[
+          new Tab(text: 'Restaurantes'),
+          new Tab(text: 'Platos'),
+        ],
       ),
     );
+  }
+
+  Widget _sinFavoritos(BuildContext context, String label, String descripcion) {
+    return Container(
+      margin: EdgeInsets.all(25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+              width: 90.0,
+              height: 90.0,
+              decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: new AssetImage('images/shopping_basket.png')))),
+          SizedBox(height: 16),
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          Text(
+            descripcion,
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(height: 40),
+          RaisedButton(
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Center(
+              child: Text(
+                "Buscar restaurantes",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listadoRestaurantes(
+      BuildContext context, String label, String descripcion) {
+    return (listRestaurantes.length == 0)
+        ? _sinFavoritos(context, label, descripcion)
+        : (new Column(children: <Widget>[
+            SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: listRestaurantes.length,
+                  itemBuilder: (context, int item) =>
+                      new ItemRestauranteFavorito(listRestaurantes[item])),
+            )
+          ]));
+  }
+
+  /*CAMBIAR CUANDO TENGAMOS EL ITEM DE PRODUCTO*/
+  Widget _listadoProductos(BuildContext context) {
+    return new Column(children: <Widget>[
+      SizedBox(
+        height: 5,
+      ),
+      Expanded(
+        child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: listRestaurantes.length,
+            itemBuilder: (context, int item) =>
+                new ItemRestauranteFavorito(listRestaurantes[item])),
+      )
+    ]);
+  }
+
+  Widget _vistaFavoritos(BuildContext context) {
+    //Se ha producido un error de conexión con el servidor
+    if (listRestaurantes == null) {
+      print('Error con el servidor');
+      return ConectorBBDD.errorServidor();
+    } else {
+      return new TabBarView(controller: _tabController, children: <Widget>[
+        _listadoRestaurantes(context, 'Añade restaurantes favoritos', ''),
+        _listadoProductos(context),
+      ]);
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: _builAppBar(context),
+        drawer: MyDrawer(widget.user, index: MyDrawer.indexPerfil),
+        body: _vistaFavoritos(context));
   }
 }

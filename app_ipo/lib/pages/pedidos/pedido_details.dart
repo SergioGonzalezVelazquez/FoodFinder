@@ -97,7 +97,6 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
   Widget _btnCancelarPedido() {
     return MaterialButton(
       onPressed: () {
-        print('cancelado');
         widget.pedido.cancelarPedido();
         setState(() {
           estadoPedido = widget.pedido.estado;
@@ -470,7 +469,11 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
               SizedBox(
                 height: 25,
               ),
-              _valorarPedido(),
+
+              /* Un pedido sólo se puede valorar cuando se ha completado
+              (pedido.estado == 2)
+               */
+              (widget.pedido.estado == 2) ? _valorarPedido() : Container(height: 0,),
               SizedBox(
                 height: 25,
               ),
