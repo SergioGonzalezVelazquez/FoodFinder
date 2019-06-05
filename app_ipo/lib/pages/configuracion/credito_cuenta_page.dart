@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 class CreditoCuentaPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _CreditoCuentaState();
   }
 }

@@ -4,12 +4,14 @@ import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/pages/my_drawer.dart';
 import 'package:app_ipo/components/item_restaurante_favorito.dart';
+import 'package:app_ipo/components/item_producto_favorito.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class FavoritosPage extends StatefulWidget {
-  User user;
+  final User _user;
 
-  FavoritosPage(this.user);
+  FavoritosPage(this._user);
 
   @override
   State<StatefulWidget> createState() => _FavoritosPageState();
@@ -28,18 +30,16 @@ class _FavoritosPageState extends State<FavoritosPage>
       vsync: this,
     );
     super.initState();
-    listRestaurantes = widget.user.restauranteFavs;
-    listProductos = widget.user.platosFavs;
+    listRestaurantes = widget._user.restauranteFavs;
+    listProductos = widget._user.platosFavs;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tabController.dispose();
   }
 
-  @override
   Widget _builAppBar(BuildContext context) {
     return new AppBar(
       //elevation: 0.0, //Quitar sombra de la appBar
@@ -121,26 +121,36 @@ class _FavoritosPageState extends State<FavoritosPage>
                   shrinkWrap: true,
                   itemCount: listRestaurantes.length,
                   itemBuilder: (context, int item) =>
-                      new ItemRestauranteFavorito(listRestaurantes[item])),
+                      new ItemRestauranteFavorito(
+                          listRestaurantes[item], widget._user)),
             )
           ]));
   }
 
   /*CAMBIAR CUANDO TENGAMOS EL ITEM DE PRODUCTO*/
-  Widget _listadoProductos(BuildContext context) {
-    return new Column(children: <Widget>[
-      SizedBox(
-        height: 5,
-      ),
-      Expanded(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: listRestaurantes.length,
-            itemBuilder: (context, int item) =>
-                new ItemRestauranteFavorito(listRestaurantes[item])),
-      )
-    ]);
+  Widget _listadoProductos(
+      BuildContext context, String label, String descripcion) {
+    return (listProductos.length == 0)
+        ? _sinFavoritos(context, label, descripcion)
+        : new Column(children: <Widget>[
+            SizedBox(
+              height: 25,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: new StaggeredGridView.countBuilder(
+                  crossAxisCount: 4,
+                  itemCount: listProductos.length,
+                  itemBuilder: (context, int item) => new ItemProductoFavorito(
+                      listProductos[item]),
+                  staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+                  mainAxisSpacing: 15.0,
+                  crossAxisSpacing: 15.0,
+                ),
+              ),
+            )
+          ]);
   }
 
   Widget _vistaFavoritos(BuildContext context) {
@@ -151,7 +161,7 @@ class _FavoritosPageState extends State<FavoritosPage>
     } else {
       return new TabBarView(controller: _tabController, children: <Widget>[
         _listadoRestaurantes(context, 'Añade restaurantes favoritos', ''),
-        _listadoProductos(context),
+        _listadoProductos(context, 'Añade platos favoritos', ''),
       ]);
     }
   }
@@ -159,7 +169,7 @@ class _FavoritosPageState extends State<FavoritosPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _builAppBar(context),
-        drawer: MyDrawer(widget.user, index: MyDrawer.indexPerfil),
+        drawer: MyDrawer(widget._user, index: MyDrawer.indexPerfil),
         body: _vistaFavoritos(context));
   }
 }

@@ -86,7 +86,8 @@ class Pedido {
   }
 
   void _calculaTotal() {
-    this._total = this._subtotal + this._envio - this._descuento;
+    this._total = (this._subtotal - (this.subtotal * (this._descuento / 100))) +
+        this._envio;
   }
 
   void cancelarPedido() {
@@ -110,7 +111,6 @@ class Pedido {
   void insertarProducto(Producto producto) {
     //Comprobar si ese producto ya se encuentra en la cesta
     int index = _listadoProductos.indexOf(new ProductoCantidad(producto, 1));
-    print('Indice de' + producto.nombre + ' :' + index.toString());
     if (index < 0) {
       //Es un producto nuevo
       _listadoProductos.add(new ProductoCantidad(producto, 1));

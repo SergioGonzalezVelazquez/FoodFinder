@@ -1,8 +1,3 @@
-import 'package:app_ipo/model/pedido_model.dart';
-import 'package:app_ipo/model/restaurante_model.dart';
-import 'package:app_ipo/model/producto_model.dart';
-import 'package:app_ipo/components/observador_usuario.dart';
-
 class Direccion {
   int _id;
   int _idUsuario;
@@ -52,9 +47,21 @@ class Direccion {
   String get localidad => _localidad;
   String get escalera => _escalera;
   String get nombreVia => _nombreVia;
+  String get piso => _piso;
 
   set nombre(String nombre) => _nombre;
   set email(String email) => _localidad;
   set password(String password) => _nombreVia;
   set telefono(String telefono) => _provincia;
+
+  @override
+  String toString() =>
+      "Calle " +
+      _nombreVia +
+      " en " +
+      _localidad +
+      "con CP " +
+      _codigoPostal.toString() +
+      " en" +
+      provincia.toString();
 }

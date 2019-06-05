@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/pages/login_page.dart';
 import 'package:app_ipo/pages/singup_page.dart';
-import 'package:app_ipo/pages/cart_page.dart';
 
-/**
- * Diccionario (Map) con los nombres de las rutas como "claves" y 
- * elementos WidgetBuilder como "valor". En la definición de cada 
- * WidgetBuilder se especfica el widget a renderizar asociado a esa
- * ruta en particular. Además, se han usado variables estáticas para
- * guardar las cadenas de las rutas y mantenerlas encapsuladas en las
- * clases que representan. 
- */
+/// Diccionario (Map) con los nombres de las rutas como "claves" y 
+/// elementos WidgetBuilder como "valor". En la definición de cada 
+/// WidgetBuilder se especfica el widget a renderizar asociado a esa
+/// ruta en particular. Además, se han usado variables estáticas para
+/// guardar las cadenas de las rutas y mantenerlas encapsuladas en las
+/// clases que representan. 
+
 
 final myRoutes = {
   '/': (BuildContext context) => LoginPage(),
@@ -22,5 +20,5 @@ final myRoutes = {
   //PedidosPage.nombreRuta: (BuildContext context) => PedidosPage(),
   //PerfilPage.nombreRuta: (BuildContext context) => PerfilPage(),
  // OrderPage.nombreRuta: (BuildContext context) => OrderPage(),
-  CartPage.nombreRuta: (BuildContext context) => CartPage(),
+  //CartPage.nombreRuta: (BuildContext context) => CartPage(),
 };

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class ItemRestauranteFavorito extends StatelessWidget {
   final Restaurante _restaurante;
+  final User _user;
 
-  ItemRestauranteFavorito(this._restaurante);
+  ItemRestauranteFavorito(this._restaurante, this._user);
 
   Widget _cardRestaurante(BuildContext context) {
-    var mediaQuery = MediaQuery;
     return InkWell(
       onTap: () {
         Route ruta = new MaterialPageRoute(
-            builder: (context) => new RestaurantDetailsPage(
-                  restaurante: _restaurante,
-                ));
+            builder: (context) =>
+                new RestaurantDetailsPage(_restaurante, _user));
         Navigator.push(context, ruta);
       },
       child: Card(

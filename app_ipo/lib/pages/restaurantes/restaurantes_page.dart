@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 //my own imports
-import 'package:app_ipo/components/listview_foodCategories.dart';
-import 'package:app_ipo/components/listview_restaurants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/model/user_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/pages/my_drawer.dart';
+import 'package:app_ipo/components/item_restaurante_list.dart';
+import 'package:app_ipo/pages/restaurantes/restaurant_search.dart';
 
 class RestaurantesPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/restaurantes";
-  User user;
-  RestaurantesPage(this.user);
+  final User _user;
+  RestaurantesPage(this._user);
 
   @override
   State<StatefulWidget> createState() => new _RestaurantesPageState();
@@ -23,11 +23,11 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
   // I need something like this To determine if SliverAppBar is expanded or not.
   ScrollController _scrollController;
   bool isAppBarExpanded = false;
-
+  List<String> filter;
   //Listado de todos los restaurantes recuperados del servidor
-  List<Restaurante> listTodosRestaurantes;
-  //Listado de restaurantes con resultados de la búsqueda
-  List<Restaurante> listFiltroRestaurantes;
+  List<Restaurante> allRestaurants;
+  //Listado de todos los restaurantes recuperados del servidor
+  List<Restaurante> filterRestaurants;
   bool isLoading;
 
   void _fetchRestaurants() async {
@@ -35,8 +35,8 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
       isLoading = true;
     });
 
-    listTodosRestaurantes = await ConectorBBDD.restaurantes();
-    listFiltroRestaurantes = new List.from(listTodosRestaurantes);
+    allRestaurants = await ConectorBBDD.restaurantes();
+    filterRestaurants = new List.from(allRestaurants);
 
     if (this.mounted) {
       /*Si no comprobamos esto, puede saltar excepción si cambiamos
@@ -50,8 +50,14 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
   @override
   void initState() {
     super.initState();
+    filter = new List<String>();
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     _fetchRestaurants();
+  }
+
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 
   bool get _changecolor {
@@ -69,6 +75,139 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     return (_scrollController.offset /
             ((MediaQuery.of(context).size.height / 2.5) - kToolbarHeight))
         .clamp(0.0, 1.0);
+  }
+
+  void filtrarRestaurantes(String restFilter) {
+    setState(() {
+      if (filter.contains(restFilter.toLowerCase())) {
+        filter.remove(restFilter.toLowerCase());
+      } else {
+        filter.add(restFilter.toLowerCase());
+      }
+
+      filterRestaurants.clear();
+      if (filter.length == 0) {
+        //Si el filtro está vacío...
+        filterRestaurants.addAll(allRestaurants);
+      } else {
+        allRestaurants.forEach((restaurant) {
+          filter.forEach((f) {
+            if (restaurant.categoria.toLowerCase().contains(f) &&
+                (!filterRestaurants.contains(restaurant))) {
+              filterRestaurants.add(restaurant);
+            }
+          });
+        });
+      }
+    });
+  }
+
+  void _showModal() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return new Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              new ListTile(
+                title: new Text('Relevantes'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants.sort((a, b) =>
+                        b.numValoraciones.compareTo(a.numValoraciones));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                title: new Text('Valoración'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants
+                        .sort((a, b) => b.valoracion.compareTo(a.valoracion));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                title: new Text('Distancia'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants
+                        .sort((a, b) => a.distancia.compareTo(b.distancia));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                title: new Text('Pedido Mínimo'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants.sort(
+                        (a, b) => a.pedidoMinimo.compareTo(b.pedidoMinimo));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                title: new Text('Gatos de entrega'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants
+                        .sort((a, b) => a.envio.compareTo(b.envio));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                title: new Text('Oferta'),
+                onTap: () {
+                  setState(() {
+                    filterRestaurants
+                        .sort((a, b) => b.descuento.compareTo(a.descuento));
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  _buildAppBar() {
+    return SliverAppBar(
+      iconTheme: IconThemeData(
+        color: _changecolor
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).bottomAppBarColor,
+      ),
+      backgroundColor: Theme.of(context).bottomAppBarColor,
+      expandedHeight: MediaQuery.of(context).size.height / 2.5,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+                context: context,
+                delegate: RestaurantSearch(allRestaurants, widget._user));
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: () {
+            _showModal();
+          },
+        ),
+      ],
+      floating: false,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+          title: Text(
+            _changecolor ? "Food Finder" : '',
+          ),
+          centerTitle: true,
+          background: _panelBusqueda()),
+    );
   }
 
   Widget _panelBusqueda() {
@@ -160,67 +299,122 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
     );
   }
 
+  /// -------------------------------------------------------------- ///
+  ///                     WIDGETS LISTADOS                           ///
+  /// -------------------------------------------------------------- ///
+
+  Widget listViewRestaurant() {
+    return new Column(
+      children: <Widget>[
+        //Barra con el número de resturantes encontrados
+        Card(
+          color: new Color(0xffeeeeee),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 25,
+            padding: const EdgeInsets.only(left: 15, top: 4),
+            child:
+                new Text(filterRestaurants.length.toString() + ' restaurantes'),
+          ),
+        ),
+        Expanded(
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: filterRestaurants.length,
+                itemBuilder: (context, int item) {
+                  return ItemRestauranteList(
+                      filterRestaurants[item], widget._user);
+                }))
+      ],
+    );
+  }
+
+  Widget listViewCategorias() {
+    return Container(
+      height: 100,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          categoriaItem("images/foodCategory/china.jpg", 'China'),
+          categoriaItem("images/foodCategory/sushi.jpg", 'Sushi'),
+          categoriaItem("images/foodCategory/pizza.jpg", 'Pizza'),
+          categoriaItem("images/foodCategory/burger.jpg", 'Hamburguesas'),
+          categoriaItem("images/foodCategory/italia.jpg", 'Italiana'),
+          categoriaItem(
+            "images/foodCategory/kebab.png",
+            'Kebab',
+          ),
+          categoriaItem("images/foodCategory/desayuno.jpg", 'Desayunos'),
+          categoriaItem("images/foodCategory/vegano.jpg", 'Vegana'),
+        ],
+      ),
+    );
+  }
+
+  Widget categoriaItem(
+    String imageLocation,
+    String textFilter,
+  ) {
+    return Card(
+        child: new InkWell(
+      onTap: () {
+        filtrarRestaurantes(textFilter);
+
+        filter.forEach((f) => print(f));
+        print('----------------');
+      },
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 100,
+            height: 70,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imageLocation),
+                fit: BoxFit.fitHeight,
+                alignment: FractionalOffset.topCenter,
+                //alignment: Alignment.topCenter,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Visibility(
+                  visible: filter.contains(textFilter.toLowerCase()),
+                  child: Icon(Icons.done, size: 14, color: Colors.green),
+                ),
+                Text(
+                  textFilter,
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: (filter.contains(textFilter.toLowerCase()))
+                          ? FontWeight.bold
+                          : FontWeight.normal),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
+
+  /// -------------------------------------------------------------- ///
+  ///                           BUILD                                ///
+  /// -------------------------------------------------------------- ///
   @override
   Widget build(BuildContext context) {
-    /*
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        //elevation: 0.0, //Quitar sombra de la appBar
-        title: new Text('Food Finder'),
-        centerTitle: true,
-      ),
-      drawer: MyDrawer(widget.user, index: MyDrawer.indexRestaurantes),
-      body: new Container(
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            //Panel superior con cuadro de búsqueda por localización
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text('Tipos de cocinas populares'),
-            ),
-            //Scroll horizontal con categorías de restaurantes
-            RestaurantTypeList(),
-            //Listado de restaurantes según el filtro
-            Expanded(
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).primaryColor),
-                        ),
-                      )
-                    : RestaurantsList(listTodosRestaurantes))
-            //RestaurantsList(),
-          ],
-        ),
-      ),
-    );*/
-    return Scaffold(
-      drawer: MyDrawer(widget.user, index: MyDrawer.indexRestaurantes),
+      drawer: MyDrawer(widget._user, index: MyDrawer.indexRestaurantes),
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
-            SliverAppBar(
-              iconTheme: IconThemeData(
-                color: _changecolor
-                    ? Theme.of(context).primaryColor
-                    : Theme.of(context).bottomAppBarColor,
-              ),
-              backgroundColor: Theme.of(context).bottomAppBarColor,
-              expandedHeight: MediaQuery.of(context).size.height / 2.5,
-              floating: false,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    _changecolor ? "Food Finder" : '',
-                  ),
-                  centerTitle: true,
-                  background: _panelBusqueda()),
-            ),
+            _buildAppBar(),
           ];
         },
         body: new Container(
@@ -232,7 +426,7 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
                 child: new Text('Tipos de cocinas populares'),
               ),
               //Scroll horizontal con categorías de restaurantes
-              RestaurantTypeList(),
+              listViewCategorias(),
               //Listado de restaurantes según el filtro
               Expanded(
                   child: isLoading
@@ -242,7 +436,7 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
                                 Theme.of(context).primaryColor),
                           ),
                         )
-                      : RestaurantsList(listTodosRestaurantes))
+                      : listViewRestaurant())
               //RestaurantsList(),
             ],
           ),

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/pages/pedidos/pedido_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class ItemPedidoList extends StatelessWidget {
   final Pedido _pedido;
+  final User _user;
 
-  ItemPedidoList(this._pedido);
+  ItemPedidoList(this._pedido, this._user);
 
   Widget _printEstado() {
     String estado;
@@ -57,9 +59,7 @@ class ItemPedidoList extends StatelessWidget {
         new ListTile(
           onTap: () {
             Route ruta = new MaterialPageRoute(
-                builder: (context) => new PedidoDetailsPage(
-                      pedido: _pedido,
-                    ));
+                builder: (context) => new PedidoDetailsPage(_pedido, _user));
             Navigator.push(context, ruta);
           },
           //Logo del restaurante

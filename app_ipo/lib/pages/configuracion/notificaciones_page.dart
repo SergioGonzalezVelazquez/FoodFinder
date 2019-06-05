@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NotificacionesPage extends StatelessWidget {
-  Widget _infoVersion(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 15,
-      decoration: BoxDecoration(color: Colors.grey),
-      child: Center(child: Text('versión 6.9.1.77645')),
-    );
-  }
-
   Widget _notificacionesPage(BuildContext context) {
     return new Container(
         margin: EdgeInsets.only(top: 25, left: 20),

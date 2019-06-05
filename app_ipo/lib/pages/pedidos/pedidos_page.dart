@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/components/item_pedido_list.dart';
 import 'package:app_ipo/model/user_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
@@ -11,9 +10,9 @@ import 'package:app_ipo/data/gestorBBDD.dart';
 class PedidosPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/pedidos";
-  User user;
+  final User _user;
 
-  PedidosPage(this.user);
+  PedidosPage(this._user);
 
   @override
   State<StatefulWidget> createState() {
@@ -37,30 +36,18 @@ class _PedidosPageState extends State<PedidosPage>
       vsync: this,
     );
     super.initState();
-    _fetchPedidos();
+    isLoading = true;
+    listPedidosGlobal = widget._user.pedidos;
+    _clasificarPedidos();
+    isLoading = false;
+
+    //_fetchPedidos();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tabController.dispose();
-  }
-
-  void _fetchPedidos() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    listPedidosGlobal = await ConectorBBDD.pedidos(widget.user.id);
-    if (listPedidosGlobal != null) {
-      widget.user.pedidos = listPedidosGlobal;
-      _clasificarPedidos();
-    }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void _clasificarPedidos() {
@@ -81,12 +68,14 @@ class _PedidosPageState extends State<PedidosPage>
             SizedBox(
               height: 15,
             ),
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: pedidos.length,
-                itemBuilder: (context, int item) =>
-                    new ItemPedidoList(pedidos[item]))
+            Expanded(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: pedidos.length,
+                  itemBuilder: (context, int item) =>
+                      new ItemPedidoList(pedidos[item], widget._user)),
+            )
           ]));
   }
 
@@ -179,7 +168,7 @@ class _PedidosPageState extends State<PedidosPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _builAppBar(),
-        drawer: MyDrawer(widget.user, index: MyDrawer.indexPedidos),
+        drawer: MyDrawer(widget._user, index: MyDrawer.indexPedidos),
         body: (isLoading)
             ? Center(
                 child: CircularProgressIndicator(

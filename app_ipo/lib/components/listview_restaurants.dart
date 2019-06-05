@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/components/item_restaurante_list.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class RestaurantsList extends StatefulWidget {
-  List<Restaurante> listRestaurantes = List();
+  final List<Restaurante> _listRestaurantes;
+  final User _user;
 
-  RestaurantsList(this.listRestaurantes);
+  RestaurantsList(this._listRestaurantes, this._user);
   @override
   State<StatefulWidget> createState() {
     return _RestaurantsListState();
@@ -31,16 +33,16 @@ class _RestaurantsListState extends State<RestaurantsList> {
             height: MediaQuery.of(context).size.height / 25,
             padding: const EdgeInsets.only(left: 15, top: 4),
             child: new Text(
-                widget.listRestaurantes.length.toString() + ' restaurantes'),
+                widget._listRestaurantes.length.toString() + ' restaurantes'),
           ),
         ),
         Expanded(
             child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: widget.listRestaurantes.length,
+                itemCount: widget._listRestaurantes.length,
                 itemBuilder: (context, int item) =>
-                    new ItemRestauranteList(widget.listRestaurantes[item])))
+                    new ItemRestauranteList(widget._listRestaurantes[item], widget._user)))
       ],
     );
   }

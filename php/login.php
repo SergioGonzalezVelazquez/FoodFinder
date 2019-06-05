@@ -8,8 +8,9 @@ $consultaSQL="SELECT * FROM usuarios WHERE email='".$_REQUEST["email"]. "' and p
 
 $resultadoConsulta = mysqli_query($conexion, $consultaSQL) or die ("Error al realizar la consulta en Pedidos");
 
+$respuestaJSON = array();
+
 if (mysqli_num_rows($resultadoConsulta) > 0){
-	$respuestaJSON = array();
 	while ($fila = mysqli_fetch_array($resultadoConsulta)){
 		$usuario = array();
 		$usuario["id"] = $fila["id"];

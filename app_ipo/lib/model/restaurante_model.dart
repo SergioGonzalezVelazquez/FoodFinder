@@ -7,6 +7,7 @@ class Restaurante {
   String _imagenLogo;
   String _imagenFondo;
   String _categoria;
+  String _informacion;
   int _valoracion; //Valores entre 0 y 5
   int _numValoraciones;
   String _distancia;
@@ -29,6 +30,7 @@ class Restaurante {
       int valoracion,
       int numValoraciones,
       String distancia,
+      String informacion,
       double pedidoMinimo,
       double envio,
       double descuento,
@@ -47,6 +49,7 @@ class Restaurante {
     this._descuento = descuento;
     this._opiniones = opiniones;
     this._productos = productos;
+    this._informacion = informacion;
   }
 
   factory Restaurante.fromJson(Map<String, dynamic> jsonData) {
@@ -69,6 +72,7 @@ class Restaurante {
   String get nombre => _nombre;
   String get imagenLogo => _imagenLogo;
   String get imagenFondo => _imagenFondo;
+  String get informacion => _informacion;
   String get categoria => _categoria;
   int get valoracion => _valoracion;
   int get numValoraciones => _numValoraciones;
@@ -83,4 +87,9 @@ class Restaurante {
 
   set opiniones(List<OpinionRestaurante> opinions) =>
       this._opiniones = opinions;
+
+  // Define that two Restaurants are equal if their id are equal
+  bool operator ==(dynamic other) {
+    return (other.id == _id);
+  }
 }

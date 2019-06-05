@@ -5,12 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 class InfoCuentaPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/favoritos";
-  User user;
+  final User user;
   InfoCuentaPage(this.user);
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _InfoCuentaState();
   }
 }

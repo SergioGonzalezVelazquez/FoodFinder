@@ -3,12 +3,14 @@ import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/pages/producto_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class ItemProductoList extends StatelessWidget {
   final Producto _producto;
-  Pedido _pedidoActual;
+  final Pedido _pedidoActual;
+  final User _user;
 
-  ItemProductoList(this._producto, this._pedidoActual);
+  ItemProductoList(this._producto, this._pedidoActual, this._user);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,8 @@ class ItemProductoList extends StatelessWidget {
                 color: Colors.transparent,
                 image: DecorationImage(
                     fit: BoxFit.fitHeight,
-                    image: NetworkImage(ConectorBBDD.endpointBBDD +
-                              _producto.imagen))),
+                    image: NetworkImage(
+                        ConectorBBDD.endpointBBDD + _producto.imagen))),
           ),
           //Nombre del producto y precio
           title: new Row(
@@ -51,8 +53,9 @@ class ItemProductoList extends StatelessWidget {
           onTap: () {
             Route ruta = new MaterialPageRoute(
                 builder: (context) => new ProductDetailsPage(
-                      producto: _producto,
-                      pedidoActual: _pedidoActual,
+                      _producto,
+                      _pedidoActual,
+                      _user,
                     ));
             Navigator.push(context, ruta);
           },

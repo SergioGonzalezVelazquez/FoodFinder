@@ -4,12 +4,11 @@ import 'package:app_ipo/pages/configuracion/direccion_nueva_page.dart';
 import 'package:app_ipo/components/item_direccion_list.dart';
 
 class DireccionesPage extends StatefulWidget {
-  User user;
+  final User user;
   DireccionesPage(this.user);
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _DireccionesPageState();
   }
 }

@@ -10,6 +10,7 @@ class User {
   String _email;
   String _password;
   String _telefono;
+  String _fotoPerfil;
   List<Direccion> _direcciones;
   List<Pedido> _historialPedidos;
   List<Restaurante> _restaurantesFavs;
@@ -17,17 +18,21 @@ class User {
 
   List<ObservadorUsuario> _observadores;
 
-  User(int id, String nombre, String email, String password,
-      {String telefono,
+  User(String nombre, String email,
+      {int id,
+      String password,
+      String telefono,
+      String fotoPerfil,
       List<Direccion> direcciones,
       List<Pedido> historialPedido,
       List<Restaurante> restaurantesFavs,
       List<Producto> platosFavs}) {
     this._id = id;
     this._nombre = nombre;
-    this._password = password;
+    this._password = password == null ? '' : password;
+    this._fotoPerfil = fotoPerfil == null ? '' : fotoPerfil;
     this._email = email;
-    this._telefono = telefono;
+    this._telefono = telefono == null ? '' : telefono;
     this._direcciones =
         (direcciones == null) ? new List<Direccion>() : direcciones;
     this._historialPedidos =
@@ -47,9 +52,13 @@ class User {
     List<Restaurante> restaurantesFavs =
         listRestaurantesFavs.map((i) => Restaurante.fromJson(i)).toList();
 
-    return User(int.parse(jsonData['id']), jsonData['nombre'],
-        jsonData['email'], jsonData['password'],
-        platosFavs: platosFavs, restaurantesFavs: restaurantesFavs);
+    return User(jsonData['nombre'], jsonData['email'],
+        password: jsonData['password'],
+        fotoPerfil: jsonData['fotoPerfil'],
+        telefono: jsonData['telefono'],
+        id: int.parse(jsonData['id']),
+        platosFavs: platosFavs,
+        restaurantesFavs: restaurantesFavs);
   }
 
   void registrarObservador(ObservadorUsuario o) {
@@ -64,6 +73,7 @@ class User {
   String get nombre => _nombre;
   String get email => _email;
   String get password => _password;
+  String get fotoPerfil => _fotoPerfil;
   String get telefono => _telefono;
   List<Direccion> get direcciones => _direcciones;
   List<Pedido> get pedidos => _historialPedidos;
@@ -80,20 +90,39 @@ class User {
     this._direcciones.add(d);
   }
 
-  /*
-  void insertarPlato(String p) {
-    this._idPlatosFavs.add(p);
+  bool isPlatoFavorito(Producto p) {
+    int index = _platosFavs.indexOf(p);
+    return index >= 0;
+  }
+
+  bool isRestauranteFavorito(Restaurante r) {
+    //Comprobar si ese restaurante ya se encuentra en favoritos
+    int index = _restaurantesFavs.indexOf(r);
+    return index >= 0;
+  }
+
+  void insertarPlato(Producto p) {
+    if (!this.isPlatoFavorito(p)) _platosFavs.add(p);
+  }
+
+  void quitarPlato(Producto p) {
+    int index = _platosFavs.indexOf(p);
+    if (index >= 0) _platosFavs.removeAt(index);
   }
 
   void insertarPedido(Pedido p) {
     this._historialPedidos.add(p);
   }
 
-  void insertarRestauranteFav(String r) {
-    this._idRestaurantesFavs.add(r);
+  void insertarRestauranteFav(Restaurante r) {
+    if (!this.isRestauranteFavorito(r)) _restaurantesFavs.add(r);
   }
 
-*/
+  void quitarRestaurante(Restaurante r) {
+    int index = _restaurantesFavs.indexOf(r);
+    if (index >= 0) _restaurantesFavs.removeAt(index);
+  }
+
   void updateUser(
       String nombre, String email, String password, String telefono) {
     _nombre = nombre;

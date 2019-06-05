@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-/**
- * Star Rating widget for Flutter
- * Autor: Stefan Matthias Aust
- * URL:   https://medium.com/icnh/a-star-rating-widget-for-flutter-41560f82c8cb
- */
+
+/// Star Rating widget for Flutter
+/// Autor: Stefan Matthias Aust
+/// URL:   https://medium.com/icnh/a-star-rating-widget-for-flutter-41560f82c8cb
 
 class StarDisplayWidget extends StatelessWidget {
   final int value;

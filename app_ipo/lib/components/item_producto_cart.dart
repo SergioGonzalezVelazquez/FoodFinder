@@ -5,9 +5,8 @@ import 'package:app_ipo/data/gestorBBDD.dart';
 
 class ItemProductoCart extends StatefulWidget {
   final ProductoCantidad productoCantidad;
-
-  Pedido pedidoActual;
-  Animation animation;
+  final Pedido pedidoActual;
+  final Animation animation;
 
   ItemProductoCart(this.productoCantidad, this.pedidoActual, this.animation);
 
@@ -20,7 +19,7 @@ class ItemProductoCart extends StatefulWidget {
 class ItemProductoCardState extends State<ItemProductoCart> {
   Widget _selectorCantidad(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 9,
+      height: MediaQuery.of(context).size.height / 8.5,
       width: MediaQuery.of(context).size.width / 9,
       decoration: BoxDecoration(
           border: Border.all(width: 2.0, color: Color(0xFFD3D3D3)),
@@ -60,8 +59,8 @@ class ItemProductoCardState extends State<ItemProductoCart> {
 
   Widget _imagenProducto(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 9,
-      width: MediaQuery.of(context).size.height / 9,
+      height: MediaQuery.of(context).size.height / 8.5,
+      width: MediaQuery.of(context).size.height / 8.5,
       decoration: BoxDecoration(
         image: DecorationImage(
             image:  NetworkImage(ConectorBBDD.endpointBBDD +

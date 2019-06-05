@@ -4,17 +4,22 @@ import 'package:app_ipo/components/item_producto_cart.dart';
 import 'package:app_ipo/components/observador_pedido.dart';
 import 'package:app_ipo/pages/order_page.dart';
 import 'package:app_ipo/model/pedido_model.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class CartPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/cartPage";
-  Pedido pedidoActual;
+  final Pedido pedidoActual;
+  final User user;
+  CartPage(this.user, {this.pedidoActual});
 
-  static Widget cestaCompraBar(BuildContext context, Pedido pedido) {
+  static Widget cestaCompraBar(
+      BuildContext context, Pedido pedido, User usuario) {
     return InkWell(
       onTap: () {
         Route ruta = new MaterialPageRoute(
             builder: (context) => new CartPage(
+                  usuario,
                   pedidoActual: pedido,
                 ));
         Navigator.push(context, ruta);
@@ -52,7 +57,6 @@ class CartPage extends StatefulWidget {
     );
   }
 
-  CartPage({this.pedidoActual});
   @override
   State<StatefulWidget> createState() {
     return _CartPageState();
@@ -81,9 +85,8 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
     return MaterialButton(
       onPressed: () {
         Route ruta = new MaterialPageRoute(
-            builder: (context) => new OrderPage(
-                  widget.pedidoActual,
-                ));
+            builder: (context) =>
+                new OrderPage(widget.pedidoActual, widget.user));
         Navigator.push(context, ruta);
       },
       child: Container(
@@ -145,7 +148,7 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
 
   Widget _totalPedido() {
     return Container(
-      height: MediaQuery.of(context).size.height / 3,
+      height: MediaQuery.of(context).size.height / 2.9,
       padding: EdgeInsets.only(
           left: MediaQuery.of(context).size.width / 30,
           right: MediaQuery.of(context).size.width / 30),
@@ -153,7 +156,8 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
         children: <Widget>[
           _infoImporte('Subtotal', subtotal),
           SizedBox(height: 10.0),
-          _infoImporte('Descuento', widget.pedidoActual.descuento),
+          _infoImporte(
+              'Descuento', (subtotal * widget.pedidoActual.descuento / 100)),
           SizedBox(height: 10.0),
           _infoImporte('Envío', widget.pedidoActual.envio),
           SizedBox(height: 10.0),
@@ -228,24 +232,6 @@ class _CartPageState extends State<CartPage> implements ObservadorPedido {
     );
   }
 
-/*
-  Widget _vistaCesta() {
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      scrollDirection: Axis.vertical,
-      children: <Widget>[
-        new ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: widget.pedidoActual.listadoProductos.length,
-            itemBuilder: (context, int item) => new ItemProductoCart(
-                widget.pedidoActual.listadoProductos[item],
-                widget.pedidoActual))
-      ],
-    );
-  }
-
-*/
   Widget _vistaCesta() {
     return AnimatedList(
         key: _listKey,

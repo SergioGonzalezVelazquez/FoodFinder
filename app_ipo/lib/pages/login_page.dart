@@ -3,160 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
-
+import 'package:app_ipo/custom_icons_icons.dart';
 import 'package:app_ipo/model/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/login";
-  static String logo = 'images/food-location.png';
+  static String imageLogo = 'images/food-location.png';
 
-  static Widget itemCard(BuildContext context,
-          {String hint,
-          IconData icono,
-          bool oscureText,
-          TextInputType tipoTexto,
-          TextEditingController controller}) =>
-      Container(
-        width: MediaQuery.of(context).size.width / 1.2,
-        height: 45,
-        margin: EdgeInsets.only(top: 22),
-        padding: EdgeInsets.only(
-            top: 4,
-            left: 16,
-            right: 16,
-            bottom: 4), //Padding texto dentro de la caja
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-            color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-        child: TextFormField(
-          maxLines: 1,
-          controller: controller,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            icon: Icon(
-              icono,
-              color: Colors.grey,
-            ),
-            hintText: hint,
-          ),
-          obscureText: oscureText,
-          keyboardType: tipoTexto,
-        ),
-      );
-
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  //0xFD7555
-
-  bool loading = false;
-  bool isLogedin = false;
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passController = TextEditingController();
-
-  Future<List> sign_in(String email, String pass) async {
-    setState(() {
-      loading = true;
-    });
-
-    User usuario = await ConectorBBDD.login(email, pass);
-    if (usuario != null) {
-      //Login correcto
-      print('ok ' + usuario.nombre);
-      Route ruta = new MaterialPageRoute(
-          builder: (context) => new RestaurantesPage(
-                usuario,
-              ));
-      Navigator.pushReplacement(context, ruta);
-    } else {
-      //Login incorrecto
-      Fluttertoast.showToast(msg: "Usuario o contraseña incorrectos");
-    }
-
-    setState(() {
-      loading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //  isSignedIn();
-  }
-
-/*
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-
-    preferences = await SharedPreferences.getInstance();
-    isLogedin = await _googleSignIn.isSignedIn();
-
-    if (isLogedin) {
-      Navigator.pushReplacementNamed(context, '/home');
-    }
-
-    setState(() {
-      loading = false;
-    });
-  }
-
-  Future handleSignIn() async {
-    preferences = await SharedPreferences.getInstance();
-
-    setState(() {
-      loading = true;
-    });
-
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleUser.authentication;
-    FirebaseUser firebaseUser = await _firebaseAuth.signInWithGoogle(
-      idToken: googleSignInAuthentication.idToken,
-      accessToken: googleSignInAuthentication.accessToken,
-    );
-
-    if (firebaseUser != null) {
-      //Si el usuario de Google existe, comprobamos si está registrado en nuestra BBDD
-      final QuerySnapshot result = await Firestore.instance
-          .collection("usuario")
-          .where("id", isEqualTo: firebaseUser.uid)
-          .getDocuments();
-      final List<DocumentSnapshot> documents = result.documents;
-
-      if (documents.length == 0) {
-        //Si el usuario no existe en nuestra bbdd...
-        //insertamos el usuario en la bbdd
-        Firestore.instance
-            .collection("usuario")
-            .document(firebaseUser.uid)
-            .setData({
-          "id": firebaseUser.uid,
-          "username": firebaseUser.displayName,
-          "profilePicture": firebaseUser.photoUrl,
-        });
-        await preferences.setString("id", firebaseUser.uid);
-        await preferences.setString("username", firebaseUser.displayName);
-        await preferences.setString("photoUrl", firebaseUser.displayName);
-      } else {
-        await preferences.setString("id", documents[0]['id']);
-        await preferences.setString("username", documents[0]['username']);
-        await preferences.setString("photoUrl", documents[0]['photoUrl']);
-      }
-      Fluttertoast.showToast(msg: "Logged was succesful");
-      setState(() {
-        loading = false;
-      });
-    } else {}
-  }
-*/
-
-  Widget _logo(BuildContext context) {
+  //Widget con logo utilizado en login y registro
+  static Widget logo(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 2.5,
@@ -164,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Image.asset(
-            LoginPage.logo,
+            LoginPage.imageLogo,
             scale: 3,
             alignment: Alignment.center,
           ),
@@ -177,113 +37,313 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  //Widget con entrada de texto utilizado en login y registro
+  static Widget itemCard(BuildContext context,
+      {String hint,
+      IconData icono,
+      bool oscureText,
+      TextInputType tipoTexto,
+      TextEditingController controller}) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 15,
+      padding: EdgeInsets.only(
+          top: 4,
+          left: 16,
+          right: 16,
+          bottom: 4), //Padding texto dentro de la caja
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+      child: TextFormField(
+        maxLines: 1,
+        controller: controller,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          icon: Icon(
+            icono,
+            color: Colors.grey,
+          ),
+          hintText: hint,
+        ),
+        obscureText: oscureText,
+        keyboardType: tipoTexto,
+      ),
+    );
+  }
+
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  //0xFD7555
+
+  bool loading = false;
+  bool isLogedin = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    final loginButton = Container(
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passController.dispose();
+  }
+
+  signIn(String email, String pass) async {
+    setState(() {
+      loading = true;
+    });
+    User usuario = await ConectorBBDD.login(email, pass);
+    if (usuario != null) {
+      print('numPedidos: ' + usuario.pedidos.length.toString());
+      //Login correcto
+      Route ruta = new MaterialPageRoute(
+          builder: (context) => new RestaurantesPage(
+                usuario,
+              ));
+      Navigator.pushReplacement(context, ruta);
+    } else {
+      //Login incorrecto
+      Fluttertoast.showToast(msg: "Usuario o contraseña incorrectos");
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future signInGoogle() async {
+    setState(() {
+      loading = true;
+    });
+    User usuario = await ConectorBBDD.loginGoogle();
+    if (usuario != null) {
+      //Login correcto
+      Route ruta = new MaterialPageRoute(
+          builder: (context) => new RestaurantesPage(
+                usuario,
+              ));
+      Navigator.pushReplacement(context, ruta);
+    } else {
+      //Login incorrecto
+      Fluttertoast.showToast(
+          msg: "Error. No se pudo iniciar sesión con Google");
+    }
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Widget _btnLogin() {
+    return Container(
       width: MediaQuery.of(context).size.width / 1.2,
-      padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
           print(_emailController.text);
-          sign_in(_emailController.text, _passController.text);
-          //handleSignIn();
+          signIn(_emailController.text, _passController.text);
         },
         padding: EdgeInsets.all(12),
         color: Theme.of(context).primaryColor,
         child: Text('ENTRAR', style: TextStyle(color: Colors.white)),
       ),
     );
+  }
 
+  Widget _widgetLogin() {
+    if (loading) {
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor:
+              AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+        ),
+      );
+    } else {
+      return Container(
+        child: Column(
+          children: <Widget>[
+            LoginPage.itemCard(context,
+                hint: 'Correo Electrónico',
+                icono: Icons.email,
+                oscureText: false,
+                tipoTexto: TextInputType.emailAddress,
+                controller: _emailController),
+            SizedBox(height: MediaQuery.of(context).size.height / 40),
+            LoginPage.itemCard(context,
+                hint: 'Contraseña',
+                icono: Icons.vpn_key,
+                oscureText: true,
+                tipoTexto: TextInputType.text,
+                controller: _passController),
+            SizedBox(height: MediaQuery.of(context).size.height / 40),
+            Align(
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                onTap: () {
+                  Fluttertoast.showToast(
+                      msg: "Funcionalidad no implementada... :(");
+                },
+                child: Text(
+                  '¿Has olvidado tu contraseña?',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height / 30),
+            _btnLogin(),
+            SizedBox(height: MediaQuery.of(context).size.height / 100),
+            _lblRegistrar(),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _loginSocial() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 6,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          _lblSocialLogin(),
+          SizedBox(height: MediaQuery.of(context).size.height / 50),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //Facebook
+              _socialIcon(
+                colors: [
+                  Color(0xFF102397),
+                  Color(0xFF187adf),
+                  Color(0xFF00eaf8),
+                ],
+                iconData: CustomIcons.facebook,
+              ),
+              //Google
+              _socialIcon(
+                  colors: [
+                    Color(0xFFff4f38),
+                    Color(0xFFff355d),
+                  ],
+                  iconData: CustomIcons.google,
+                  onPressed: () {
+                    signInGoogle();
+                  }),
+              //twitter
+              _socialIcon(
+                colors: [
+                  Color(0xFF17ead9),
+                  Color(0xFF6078ea),
+                ],
+                iconData: CustomIcons.twitter,
+              ),
+              //linkedin
+              _socialIcon(
+                colors: [
+                  Color(0xFF00c6fb),
+                  Color(0xFF005bea),
+                ],
+                iconData: CustomIcons.linkedin,
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _socialIcon(
+      {List<Color> colors, IconData iconData, Function onPressed}) {
+    return new Padding(
+      padding: EdgeInsets.only(left: 14.0),
+      child: Container(
+        width: 45.0,
+        height: 45.0,
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(colors: colors, tileMode: TileMode.clamp)),
+        child: RawMaterialButton(
+          shape: CircleBorder(),
+          onPressed: (onPressed != null)
+              ? onPressed
+              : () {
+                  Fluttertoast.showToast(
+                      msg: "Funcionalidad no implementada... :(");
+                },
+          child: Icon(iconData, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget _lblSocialLogin() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        //Horizontal line
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 3.5,
+              height: 1.0,
+              color: Colors.black26.withOpacity(.2),
+            )),
+        Text(
+          'O',
+          style: TextStyle(color: Colors.grey),
+        ),
+        //Horizontal line
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 3.5,
+              height: 1.0,
+              color: Colors.black26.withOpacity(.2),
+            )),
+      ],
+    );
+  }
+
+  Widget _lblRegistrar() {
+    return InkWell(
+      child: Text(
+        '¿Aún no tienes cuenta? REGÍSTRATE',
+        style: TextStyle(
+            fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.grey),
+      ),
+      onTap: () {
+        print("Has presionado el botón de registrase");
+        Navigator.pushNamed(context, '/signup');
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
+        margin: EdgeInsets.symmetric(
+            vertical: 10, horizontal: MediaQuery.of(context).size.width / 10),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 45),
         child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _logo(context),
-            loading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).primaryColor),
-                    ),
-                  )
-                : Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(top: 12),
-                    child: Column(
-                      children: <Widget>[
-                        LoginPage.itemCard(context,
-                            hint: 'Correo Electrónico',
-                            icono: Icons.email,
-                            oscureText: false,
-                            tipoTexto: TextInputType.emailAddress,
-                            controller: _emailController),
-                        LoginPage.itemCard(context,
-                            hint: 'Contraseña',
-                            icono: Icons.vpn_key,
-                            oscureText: true,
-                            tipoTexto: TextInputType.text,
-                            controller: _passController),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 16, right: 32),
-                            child: Text(
-                              '¿Has olvidado tu contraseña?',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                        loginButton,
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 18.0),
-                                child: FlatButton(
-                                  child: Text(
-                                    '¿Aún no tienes cuenta? REGÍSTRATE',
-                                    style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  textColor: Colors.grey,
-                                  color: Colors.transparent,
-                                  onPressed: () {
-                                    print(
-                                        "Has presionado el botón de registrase");
-                                    Navigator.pushNamed(context, '/signup');
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: loading ?? true,
-                          child: Center(
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.white.withOpacity(0.9),
-                              child: CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.red),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+            LoginPage.logo(context),
+            _widgetLogin(),
           ],
         ),
       ),
+      bottomNavigationBar: _loginSocial(),
     );
   }
 }

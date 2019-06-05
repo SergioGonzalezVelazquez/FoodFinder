@@ -7,6 +7,8 @@ import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
 import 'package:app_ipo/pages/cart_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 //tabs imports
 import 'package:app_ipo/pages/restaurantes/tabs_restaurant_details/info_restaurante.dart';
@@ -18,9 +20,10 @@ import 'package:app_ipo/data/gestorBBDD.dart';
 
 class RestaurantDetailsPage extends StatefulWidget {
   //Propiedad inmutable
-  final Restaurante restaurante;
+  final Restaurante _restaurante;
+  final User _user;
 
-  RestaurantDetailsPage({this.restaurante});
+  RestaurantDetailsPage(this._restaurante, this._user);
 
   @override
   State<StatefulWidget> createState() {
@@ -30,50 +33,72 @@ class RestaurantDetailsPage extends StatefulWidget {
 
 class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     with SingleTickerProviderStateMixin {
-  @override
   TabController _controladorTabs;
-  bool isLoadingOpinions = false;
-  bool isLoadingProducts = false;
+  bool _isLoadingOpinions = false;
+  bool _isLoadingProducts = false;
+  bool _isFavorito;
   Pedido _pedidoActual;
 
   void initState() {
     super.initState();
-
+    _isFavorito = widget._user.isRestauranteFavorito(widget._restaurante);
     _controladorTabs = new TabController(vsync: this, length: 3);
     _fetchOpiniones();
     _fetchProductos();
-    print(ConectorBBDD.endpointBBDD + widget.restaurante.imagenLogo);
+    print(ConectorBBDD.endpointBBDD + widget._restaurante.imagenLogo);
 
     _pedidoActual = new Pedido(
-        envio: widget.restaurante.envio,
-        descuento: widget.restaurante.descuento);
+        envio: widget._restaurante.envio,
+        descuento: widget._restaurante.descuento);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controladorTabs.dispose();
+  }
+
+  void _toggleFavoriteStatus() {
+    if (_isFavorito) {
+      setState(() {
+        _isFavorito = false;
+      });
+      widget._user.quitarRestaurante(widget._restaurante);
+      Fluttertoast.showToast(msg: "Eliminado de restaurantes favoritos");
+    } else {
+      setState(() {
+        _isFavorito = true;
+      });
+      widget._user.insertarRestauranteFav(widget._restaurante);
+      Fluttertoast.showToast(msg: "Añadido a restaurantes favoritos");
+    }
   }
 
   void _fetchOpiniones() async {
     setState(() {
-      isLoadingOpinions = true;
+      _isLoadingOpinions = true;
     });
 
     List<OpinionRestaurante> opiniones =
-        await ConectorBBDD.opiniones(widget.restaurante.id);
-    widget.restaurante.opiniones = opiniones;
+        await ConectorBBDD.opiniones(widget._restaurante.id);
+    widget._restaurante.opiniones = opiniones;
 
     setState(() {
-      isLoadingOpinions = false;
+      _isLoadingOpinions = false;
     });
   }
 
   void _fetchProductos() async {
     setState(() {
-      isLoadingProducts = true;
+      _isLoadingProducts = true;
     });
 
     List<Producto> productos =
-        await ConectorBBDD.productos(widget.restaurante.id);
-    widget.restaurante.productos = productos;
+        await ConectorBBDD.productos(widget._restaurante.id);
+    widget._restaurante.productos = productos;
 
     setState(() {
-      isLoadingProducts = false;
+      _isLoadingProducts = false;
     });
   }
 
@@ -97,7 +122,6 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
             child: Container(
               height: MediaQuery.of(context).size.height / 14,
               width: double.infinity,
-
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
@@ -174,19 +198,37 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     );
   }
 
-  Widget _buildAppBar(BuildContext context, Pedido pedido) {
+  Widget _buildAppBar(Pedido pedido) {
     return new AppBar(
-      title: new Text(widget.restaurante.nombre),
-      centerTitle: true,
+      title: new Text(widget._restaurante.nombre),
+      // centerTitle: true,
       iconTheme: IconThemeData(
         color: Theme.of(context).primaryColor,
       ),
       backgroundColor: Theme.of(context).bottomAppBarColor,
-      actions: <Widget>[CartPage.cestaCompraBar(context, pedido)],
+      actions: <Widget>[
+        _btnFavorito(),
+        CartPage.cestaCompraBar(context, pedido, widget._user)
+      ],
     );
   }
 
-  Widget _infoRestaurante(BuildContext context) {
+  Widget _btnFavorito() {
+    return IconButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent, // makes highlight invisible to
+      onPressed: () {
+        _toggleFavoriteStatus();
+      },
+      icon: new Icon(
+        _isFavorito ? Icons.favorite : Icons.favorite_border,
+        color: Theme.of(context).primaryColor,
+        size: 34,
+      ),
+    );
+  }
+
+  Widget _infoRestaurante() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 5,
@@ -195,7 +237,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               colorFilter: new ColorFilter.mode(
                   Colors.white.withOpacity(0.8), BlendMode.modulate),
               image: NetworkImage(
-                  ConectorBBDD.endpointBBDD + widget.restaurante.imagenFondo),
+                  ConectorBBDD.endpointBBDD + widget._restaurante.imagenFondo),
               fit: BoxFit.cover)),
       child: new Row(children: <Widget>[
         //Información sobre la imagen del fondo
@@ -210,7 +252,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
               image: DecorationImage(
                   fit: BoxFit.fitHeight,
                   image: NetworkImage(ConectorBBDD.endpointBBDD +
-                      widget.restaurante.imagenLogo))),
+                      widget._restaurante.imagenLogo))),
         ),
         Container(
             padding: const EdgeInsets.only(left: 10.0),
@@ -221,7 +263,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
 
               children: <Widget>[
                 new Text(
-                  widget.restaurante.nombre,
+                  widget._restaurante.nombre,
                   style: new TextStyle(
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
@@ -230,12 +272,12 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
                 new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.restaurante.categoria,
+                    Text(widget._restaurante.categoria,
                         style: new TextStyle(color: Colors.white)),
                     new Row(
                       children: <Widget>[
                         StarDisplayWidget(
-                          value: widget.restaurante.valoracion,
+                          value: widget._restaurante.valoracion,
                           filledStar:
                               Icon(Icons.star, color: Colors.white, size: 13.5),
                           unfilledStar:
@@ -245,7 +287,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
                           padding: EdgeInsets.only(left: 8.0),
                           child: new Text(
                               '(' +
-                                  widget.restaurante.numValoraciones
+                                  widget._restaurante.numValoraciones
                                       .toString() +
                                   ')',
                               style: new TextStyle(color: Colors.white)),
@@ -260,7 +302,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     );
   }
 
-  Widget _tabBar(BuildContext context) {
+  Widget _tabBar() {
     return Container(
       child: TabBar(
         indicatorColor: Theme.of(context).primaryColor,
@@ -280,25 +322,27 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     );
   }
 
-  Widget _tabBarView(BuildContext context) {
+  Widget _tabBarView() {
     return Expanded(
       child: new TabBarView(
         controller: _controladorTabs,
         children: <Widget>[
-          isLoadingProducts
+          _isLoadingProducts
               ? new Center(
                   child: CircularProgressIndicator(),
                 )
               : new RestaurantMenus(
-                  productos: widget.restaurante.productos,
-                  pedidoActual: _pedidoActual,
+                  widget._restaurante.productos,
+                  _pedidoActual,
+                  widget._user,
+                  descuento: widget._restaurante.descuento,
                 ),
-          isLoadingOpinions
+          _isLoadingOpinions
               ? new Center(
                   child: CircularProgressIndicator(),
                 )
               : new RestaurantOpiniones(
-                  opiniones: widget.restaurante.opiniones),
+                  opiniones: widget._restaurante.opiniones),
           new RestaurantInfo(),
         ],
       ),
@@ -309,14 +353,14 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: _buildAppBar(context, _pedidoActual),
+        appBar: _buildAppBar(_pedidoActual),
         body: new Container(
           child: new Column(
             children: <Widget>[
               //Barra superior con imagen de fondo e informacion del restaurante
-              _infoRestaurante(context),
-              _tabBar(context),
-              _tabBarView(context),
+              _infoRestaurante(),
+              _tabBar(),
+              _tabBarView(),
             ],
           ),
         ),

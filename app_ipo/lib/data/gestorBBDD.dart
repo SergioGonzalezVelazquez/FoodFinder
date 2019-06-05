@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_ipo/model/user_model.dart';
 import 'package:app_ipo/model/restaurante_model.dart';
 import 'package:app_ipo/model/producto_model.dart';
@@ -11,8 +12,9 @@ import 'package:app_ipo/model/pedido_model.dart';
 final String phpRestaurantes = "restaurantes.php";
 final String phpOpiniones = "opiniones.php";
 final String phpProductos = "productos.php";
-final String phpLogin = "login.php";
+final String phpLogin = "loginNuevo.php";
 final String phpPedidos = "pedidos.php";
+final String phpSignUp = "signup.php";
 
 class ConectorBBDD {
   static String endpointBBDD = "https://ipo-flutter.000webhostapp.com/";
@@ -45,13 +47,81 @@ class ConectorBBDD {
       "email": email,
       "password": pass,
     });
-
-    var dataUser = json.decode(response.body);
-
-    if (dataUser.length == 0) {
+    try {
+      var dataUser = json.decode(response.body);
+      if (dataUser.length == 0) {
+        return null;
+      } else {
+        User user = new User.fromJson(dataUser[0]);
+        user.pedidos = await ConectorBBDD.pedidos(user.id);
+        return user;
+      }
+    } catch (e) {
       return null;
+    }
+  }
+
+  static Future<User> loginGoogle() async {
+    final GoogleSignIn googleSignIn = new GoogleSignIn();
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+    GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleUser.authentication;
+    FirebaseUser firebaseUser = await firebaseAuth.signInWithGoogle(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken);
+
+    if (firebaseUser != null) {
+      //Si el usuario de Google existe, comprobamos si está registrado en nuestra BBDD
+      final response = await http.post(endpointBBDD + phpLogin, body: {
+        "email": firebaseUser.email,
+      });
+      try {
+        var dataUser = json.decode(response.body);
+        if (dataUser.length == 0) {
+          //No está registrado, lo registramos
+          User nuevoUser = new User(
+              firebaseUser.displayName, firebaseUser.email,
+              fotoPerfil: firebaseUser.photoUrl,
+              telefono: firebaseUser.phoneNumber);
+          ConectorBBDD.signup(nuevoUser);
+          return nuevoUser;
+        } else {
+          User user = new User.fromJson(dataUser[0]);
+          user.pedidos = await ConectorBBDD.pedidos(user.id);
+          return user;
+        }
+      } catch (e) {
+        return new User(firebaseUser.displayName, firebaseUser.email,
+            fotoPerfil: firebaseUser.photoUrl,
+            telefono: firebaseUser.phoneNumber);
+      }
     } else {
-      return new User.fromJson(dataUser[0]);
+      return null;
+    }
+  }
+
+  static Future<bool> signup(User usuario) async {
+    final response = await http.post(endpointBBDD + phpSignUp, body: {
+      "email": usuario.email,
+      "password": usuario.password,
+      "nombre": usuario.nombre,
+      "fotoPerfil": usuario.fotoPerfil,
+      "telefono": usuario.telefono
+    });
+
+    try {
+      var jsonData = json.decode(response.body);
+      if (jsonData['code'] == '1') {
+        //success code
+        return true;
+      } else {
+        //error code
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 
@@ -60,7 +130,6 @@ class ConectorBBDD {
     List restaurantes = json.decode(response.body);
     return restaurantes.map((i) => new Restaurante.fromJson(i)).toList();
   }
-  
 
   static Future<List<Producto>> productos(int idRestaurante) async {
     final response = await http.post(endpointBBDD + phpProductos, body: {
@@ -79,18 +148,9 @@ class ConectorBBDD {
   }
 
   static Future<List<Pedido>> pedidos(int idUsuario) async {
-    print('IDUSER:' + idUsuario.toString());
     final response = await http.post(endpointBBDD + phpPedidos, body: {
       "idCliente": idUsuario.toString(),
     });
-    /*try {
-      List pedidos = json.decode(response.body);
-      return pedidos.map((i) => new Pedido.fromJson(i)).toList();
-    } catch (e) {
-      print(e);
-      return null;
-    }
-    */
     List pedidos = json.decode(response.body);
     return pedidos.map((i) => new Pedido.fromJson(i)).toList();
   }

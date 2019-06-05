@@ -14,7 +14,6 @@ class RestaurantInfo extends StatefulWidget {
 }
 
 class _RestaurantInfoPage extends State<RestaurantInfo> {
-  @override
   Widget _ubicacionRestaurante(BuildContext context) {
     return new Container(
       height: MediaQuery.of(context).size.height / 4,

@@ -4,14 +4,15 @@ import 'package:app_ipo/model/pedido_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/pages/cart_page.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
+import 'package:app_ipo/model/user_model.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   //Propiedad inmutable
   final Producto producto;
-  Pedido pedidoActual;
-  //Usuario usuario;
+  final Pedido pedidoActual;
+  final User user;
 
-  ProductDetailsPage({this.producto, this.pedidoActual});
+  ProductDetailsPage(this.producto, this.pedidoActual, this.user);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,14 +21,12 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetailsPage> {
-  @override
   bool isFavorito;
 
   @override
   void initState() {
     super.initState();
-    isFavorito = false;
-    //isFavorito = user.isFavorito(idProducto);
+    isFavorito = widget.user.isPlatoFavorito(widget.producto);
   }
 
   Widget _imagenProducto(BuildContext context) {
@@ -82,40 +81,48 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
     if (isFavorito) {
       setState(() {
         isFavorito = false;
-        //usuario.eliminarPlatoFavorito()
-        Fluttertoast.showToast(msg: "Eliminado de platos favoritos");
       });
+      widget.user.quitarPlato(widget.producto);
+      Fluttertoast.showToast(msg: "Eliminado de platos favoritos");
     } else {
       setState(() {
         isFavorito = true;
       });
-      //usuario.añadirPlatoFavorito()
+      widget.user.insertarPlato(widget.producto);
       Fluttertoast.showToast(msg: "Añadido a platos favoritos");
     }
   }
 
-  Widget _btnAniadirProducto(BuildContext context) {
-    return Expanded(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+  Widget _btnAniadirProducto() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 8,
+      padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width / 30,
+          right: MediaQuery.of(context).size.width / 30),
       child: MaterialButton(
-        color: Theme.of(context).primaryColor,
         onPressed: () {
-          print('Has pulsado añadir al pedido');
           setState(() {
             widget.pedidoActual.insertarProducto(widget.producto);
           });
         },
-        child: Text(
-          "Añadir al pedido".toUpperCase(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
+        child: Container(
+          height: MediaQuery.of(context).size.height / 14,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: Center(
+            child: Text(
+              "Añadir al pedido".toUpperCase(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _btnFavorito(BuildContext context) {
@@ -133,55 +140,34 @@ class _ProductDetailsState extends State<ProductDetailsPage> {
     );
   }
 
+  Widget _buildAppBar() {
+    return new AppBar(
+      title: new Text(widget.producto.nombre),
+      iconTheme: IconThemeData(
+        color: Theme.of(context).primaryColor,
+      ),
+      backgroundColor: Theme.of(context).bottomAppBarColor,
+      actions: <Widget>[
+        _btnFavorito(context),
+        CartPage.cestaCompraBar(context, widget.pedidoActual, widget.user)
+      ],
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.producto.nombre),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).primaryColor,
+      appBar: _buildAppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _imagenProducto(context),
+            _precioProducto(context),
+            _nombreProducto(context),
+            _descripcionProducto(context),
+          ],
         ),
-        backgroundColor: Theme.of(context).bottomAppBarColor,
-        actions: <Widget>[
-          CartPage.cestaCompraBar(context, widget.pedidoActual)
-        ],
       ),
-      body: new Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: new ConstrainedBox(
-                constraints: new BoxConstraints(),
-                child: Column(
-                  children: <Widget>[
-                    _imagenProducto(context),
-                    _precioProducto(context),
-                    _nombreProducto(context),
-                    _descripcionProducto(context),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-                height: MediaQuery.of(context).size.height / 8,
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 30,
-                  right: MediaQuery.of(context).size.width / 30,
-                  bottom: MediaQuery.of(context).size.height / 100,
-                ),
-                decoration: BoxDecoration(color: Colors.white),
-                child: Row(
-                  children: <Widget>[
-                    _btnAniadirProducto(context),
-                    _btnFavorito(context),
-                  ],
-                )),
-          )
-        ],
-      ),
+      bottomNavigationBar: _btnAniadirProducto(),
     );
   }
 }

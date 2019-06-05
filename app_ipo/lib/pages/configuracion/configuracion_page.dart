@@ -8,7 +8,7 @@ import 'package:app_ipo/pages/configuracion/direcciones_page.dart';
 class SettingsPage extends StatelessWidget {
 //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/configuracion";
-  User user;
+  final User user;
   SettingsPage(this.user);
 
   Widget _infoVersion(BuildContext context) {

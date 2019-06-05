@@ -6,12 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 class DireccionNuevaPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
   static const nombreRuta = "/favoritos";
-  User user;
+  final User user;
   DireccionNuevaPage(this.user);
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _DireccionNuevaState();
   }
 }
@@ -100,7 +99,7 @@ class _DireccionNuevaState extends State<DireccionNuevaPage> {
               if (_key.currentState.validate()) {
                 // No any error in validation
                 _key.currentState.save();
-                widget.user.insertarDireccion(new Direccion(
+                Direccion nuevaDireccion = new Direccion(
                     _nombre,
                     _localidad,
                     _nombreVia,
@@ -109,7 +108,8 @@ class _DireccionNuevaState extends State<DireccionNuevaPage> {
                     int.parse(_codigoPostal),
                     escalera: _escalera,
                     bloque: _bloque,
-                    piso: _piso));
+                    piso: _piso);
+                widget.user.insertarDireccion(nuevaDireccion);
                 Navigator.of(context).pop();
                 Fluttertoast.showToast(msg: "Tus cambios se han guardado");
               } else {

@@ -6,12 +6,15 @@ import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/components/item_pedido_list.dart';
 import 'package:app_ipo/pages/cart_page.dart';
+import 'package:app_ipo/model/user_model.dart';
+import 'package:app_ipo/custom_icons_icons.dart';
 
 class PedidoDetailsPage extends StatefulWidget {
   //Propiedad inmutable
-  final Pedido pedido;
+  final Pedido _pedido;
+  final User _user;
 
-  PedidoDetailsPage({this.pedido});
+  PedidoDetailsPage(this._pedido, this._user);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,22 +30,20 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
     /*Queremos que el estado del pedido sea una propiedad dinámica para que,
     al cancelar un pedido en elaboración se produzca un cambio en la interfaz*/
     super.initState();
-    estadoPedido = widget.pedido.estado;
+    estadoPedido = widget._pedido.estado;
   }
 
-  @override
   Widget _btnVerRestaurante() {
     return MaterialButton(
       onPressed: () {
         Route ruta = new MaterialPageRoute(
             builder: (context) => new RestaurantDetailsPage(
-                  restaurante: widget.pedido.restaurante,
-                ));
+                widget._pedido.restaurante, widget._user));
         Navigator.push(context, ruta);
       },
       child: Container(
         height: MediaQuery.of(context).size.height / 14,
-        width: MediaQuery.of(context).size.width / 2.7,
+        width: MediaQuery.of(context).size.width / 3,
         decoration: BoxDecoration(
           color: Theme.of(context).bottomAppBarColor,
         ),
@@ -64,19 +65,20 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
     return MaterialButton(
       onPressed: () {
         Pedido nuevoPedido = new Pedido(
-          envio: widget.pedido.envio,
-          descuento: widget.pedido.descuento,
+          envio: widget._pedido.envio,
+          descuento: widget._pedido.descuento,
           estado: 1, //En elaboración
-          restaurante: widget.pedido.restaurante,
-          listadoProductos: widget.pedido.listadoProductos,
+          restaurante: widget._pedido.restaurante,
+          listadoProductos: widget._pedido.listadoProductos,
         );
         Route ruta = new MaterialPageRoute(
-            builder: (context) => new CartPage(pedidoActual: nuevoPedido));
+            builder: (context) =>
+                new CartPage(widget._user, pedidoActual: nuevoPedido));
         Navigator.push(context, ruta);
       },
       child: Container(
         height: MediaQuery.of(context).size.height / 14,
-        width: MediaQuery.of(context).size.width / 2.7,
+        width: MediaQuery.of(context).size.width / 3,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
         ),
@@ -97,9 +99,9 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
   Widget _btnCancelarPedido() {
     return MaterialButton(
       onPressed: () {
-        widget.pedido.cancelarPedido();
+        widget._pedido.cancelarPedido();
         setState(() {
-          estadoPedido = widget.pedido.estado;
+          estadoPedido = widget._pedido.estado;
         });
       },
       child: Container(
@@ -119,6 +121,87 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget estadoPedidoEnCurso() {
+    return Card(
+        child: Container(
+      margin: EdgeInsets.all(15),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _circuloEstado(Icons.done, true),
+              _separadorHorizontal(true),
+              _circuloEstado(CustomIcons.cooking, true),
+              _separadorHorizontal(false),
+              _circuloEstado(CustomIcons.delivery, false),
+              _separadorHorizontal(false),
+              _circuloEstado(Icons.restaurant, false),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _labelEstado('Recibido', true),
+              _labelEstado('Preparando', true),
+              _labelEstado('De camino', false),
+              _labelEstado('Entregado', false)
+            ],
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget _labelEstado(String label, bool completed) {
+    return Text(
+      label.toUpperCase(),
+      style: TextStyle(
+          fontSize: 12,
+          color: completed ? Theme.of(context).primaryColor : Colors.grey),
+    );
+  }
+
+  Widget _separadorHorizontal(bool completed) {
+    return new Container(
+        height: 1.5,
+        width: MediaQuery.of(context).size.width / 12,
+        color: completed ? Theme.of(context).primaryColor : Colors.grey);
+  }
+
+  Widget _circuloEstado(IconData icon, bool completed) {
+    return Column(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width / 8,
+          height: MediaQuery.of(context).size.width / 8,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: completed
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey, //                   <--- border color
+              width: 2.0,
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              icon,
+              color: completed ? Theme.of(context).primaryColor : Colors.grey,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -148,9 +231,9 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
             ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: widget.pedido.listadoProductos.length,
+                itemCount: widget._pedido.listadoProductos.length,
                 itemBuilder: (context, int item) =>
-                    _resumenPedidoItem(widget.pedido.listadoProductos[item])),
+                    _resumenPedidoItem(widget._pedido.listadoProductos[item])),
             SizedBox(
               height: 20,
             ),
@@ -162,7 +245,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  '€' + widget.pedido.subtotal.toStringAsFixed(2),
+                  '€' + widget._pedido.subtotal.toStringAsFixed(2),
                 )
               ],
             ),
@@ -176,7 +259,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                   'total'.toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
-                Text('€' + widget.pedido.total.toStringAsFixed(2),
+                Text('€' + widget._pedido.total.toStringAsFixed(2),
                     style: TextStyle(fontWeight: FontWeight.bold))
               ],
             ),
@@ -184,7 +267,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
               height: 20,
             ),
             Text(
-              widget.pedido.restaurante.nombre,
+              widget._pedido.restaurante.nombre,
               style: TextStyle(fontSize: 14),
             ),
             Text(
@@ -263,7 +346,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                     width: 8,
                   ),
                   Text(
-                    'Llama a ' + widget.pedido.restaurante.nombre,
+                    'Llama a ' + widget._pedido.restaurante.nombre,
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -343,6 +426,9 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
                     ),
                   ),
                   InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                     child: Container(
                       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                       decoration: BoxDecoration(
@@ -443,7 +529,13 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             children: <Widget>[
-              ItemPedidoList(widget.pedido),
+              ItemPedidoList(widget._pedido, widget._user),
+              SizedBox(
+                height: 10,
+              ),
+              Visibility(
+                  visible: widget._pedido.estado == 1,
+                  child: estadoPedidoEnCurso()),
               SizedBox(
                 height: 10,
               ),
@@ -453,7 +545,7 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
               el pedido está completado o cancelado, se muestran dos botones
               alineados horizontalmente: verRestaurante y repetirPedido
                */
-              ((widget.pedido.estado != 1)
+              ((widget._pedido.estado != 1)
                   ? (new Row(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
@@ -473,7 +565,11 @@ class _PedidoDetailsState extends State<PedidoDetailsPage> {
               /* Un pedido sólo se puede valorar cuando se ha completado
               (pedido.estado == 2)
                */
-              (widget.pedido.estado == 2) ? _valorarPedido() : Container(height: 0,),
+              (widget._pedido.estado == 2)
+                  ? _valorarPedido()
+                  : Container(
+                      height: 0,
+                    ),
               SizedBox(
                 height: 25,
               ),

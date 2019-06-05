@@ -13,8 +13,10 @@ class MyDrawer extends StatefulWidget {
   static int indexConfiguracion = 3;
   static int indexDesconectar = 4;
 
-  User user;
-  int index;
+  final String defaultFotoPerfil = 'images/user.png';
+
+  final User user;
+  final int index;
 
   MyDrawer(this.user, {this.index});
   State<StatefulWidget> createState() => new _MyDrawerState();
@@ -45,7 +47,7 @@ class _MyDrawerState extends State<MyDrawer> implements ObservadorUsuario {
   }
 
   /* Función que devuelve el widget que se tiene que mostrar en la pantalla dado un valor seleccionado.*/
-  Route _getRoute(int pos) {
+  _getRoute(int pos) {
     switch (pos) {
       case 0:
         return new MaterialPageRoute(
@@ -107,7 +109,10 @@ class _MyDrawerState extends State<MyDrawer> implements ObservadorUsuario {
         accountName: new Text(_nombreUser),
         accountEmail: new Text(_emailUser),
         currentAccountPicture: new CircleAvatar(
-          backgroundImage: AssetImage('images/user.png'),
+          backgroundImage:
+              (widget.user.fotoPerfil == null || widget.user.fotoPerfil == '')
+                  ? AssetImage(widget.defaultFotoPerfil)
+                  : NetworkImage(widget.user.fotoPerfil),
           backgroundColor: Colors.white,
           //child: new Text("S",style: new TextStyle( color: Colors.white)),
         ),
