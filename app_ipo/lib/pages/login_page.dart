@@ -5,10 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_ipo/pages/restaurantes/restaurantes_page.dart';
 import 'package:app_ipo/custom_icons_icons.dart';
 import 'package:app_ipo/model/user_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   //Variable estática que se utiliza en routes.dart
@@ -90,9 +86,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passController.dispose();
+    super.dispose();
   }
 
   signIn(String email, String pass) async {
@@ -101,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
     });
     User usuario = await ConectorBBDD.login(email, pass);
     if (usuario != null) {
-      print('numPedidos: ' + usuario.pedidos.length.toString());
       //Login correcto
       Route ruta = new MaterialPageRoute(
           builder: (context) => new RestaurantesPage(
@@ -148,8 +143,14 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          print(_emailController.text);
-          signIn(_emailController.text, _passController.text);
+          if (_emailController.text.trim().isEmpty ||
+              _passController.text.trim().isEmpty) {
+            Fluttertoast.showToast(
+                msg:
+                    "Introduzca su dirección de correo electrónico y contraseña");
+          } else {
+            signIn(_emailController.text.trim(), _passController.text);
+          }
         },
         padding: EdgeInsets.all(12),
         color: Theme.of(context).primaryColor,
@@ -322,7 +323,6 @@ class _LoginPageState extends State<LoginPage> {
             fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.grey),
       ),
       onTap: () {
-        print("Has presionado el botón de registrase");
         Navigator.pushNamed(context, '/signup');
       },
     );

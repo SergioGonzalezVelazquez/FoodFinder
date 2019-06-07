@@ -4,6 +4,8 @@ import 'package:app_ipo/pages/pedidos/pedido_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/model/user_model.dart';
 
+///Item del listado de pedidos de un usuario
+///Se utliza tanto para pedidos en elaboración como completados
 class ItemPedidoList extends StatelessWidget {
   final Pedido _pedido;
   final User _user;

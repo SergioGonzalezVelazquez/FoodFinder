@@ -45,11 +45,13 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
     _controladorTabs = new TabController(vsync: this, length: 3);
     _fetchOpiniones();
     _fetchProductos();
-    print(ConectorBBDD.endpointBBDD + widget._restaurante.imagenLogo);
 
     _pedidoActual = new Pedido(
         envio: widget._restaurante.envio,
-        descuento: widget._restaurante.descuento);
+        numPedido: 123456,
+        estado:1,
+        descuento: widget._restaurante.descuento,
+        restaurante: widget._restaurante);
   }
 
   @override
@@ -343,7 +345,7 @@ class _RestaurantDetailsState extends State<RestaurantDetailsPage>
                 )
               : new RestaurantOpiniones(
                   opiniones: widget._restaurante.opiniones),
-          new RestaurantInfo(),
+          new RestaurantInfo(widget._restaurante),
         ],
       ),
     );

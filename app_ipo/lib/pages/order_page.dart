@@ -43,7 +43,6 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   void initState() {
-    print(widget.user.direcciones.length);
     if (widget.user.direcciones.length != 0) {
       Direccion direccion = widget.user.direcciones.last;
       _localidad.text = direccion.localidad;

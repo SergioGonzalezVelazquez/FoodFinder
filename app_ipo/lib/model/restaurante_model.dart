@@ -7,7 +7,7 @@ class Restaurante {
   String _imagenLogo;
   String _imagenFondo;
   String _categoria;
-  String _informacion;
+  String _descripcion;
   int _valoracion; //Valores entre 0 y 5
   int _numValoraciones;
   String _distancia;
@@ -30,7 +30,7 @@ class Restaurante {
       int valoracion,
       int numValoraciones,
       String distancia,
-      String informacion,
+      String descripcion,
       double pedidoMinimo,
       double envio,
       double descuento,
@@ -41,15 +41,15 @@ class Restaurante {
     this._imagenLogo = imagenLogo;
     this._imagenFondo = imagenFondo;
     this._categoria = categoria;
-    this._valoracion = valoracion;
+    this._valoracion = valoracion == null ? 0 : valoracion;
     this._numValoraciones = numValoraciones;
-    this._pedidoMinimo = pedidoMinimo;
-    this._distancia = distancia;
-    this._envio = envio;
-    this._descuento = descuento;
+    this._pedidoMinimo = pedidoMinimo == null ? 0 : pedidoMinimo;
+    this._distancia = distancia == null ? '0' : distancia;
+    this._envio = envio == null ? 0 : envio;
+    this._descuento = descuento == null ? 0 : descuento;
     this._opiniones = opiniones;
     this._productos = productos;
-    this._informacion = informacion;
+    this._descripcion = descripcion == null ? '' : descripcion;
   }
 
   factory Restaurante.fromJson(Map<String, dynamic> jsonData) {
@@ -59,6 +59,7 @@ class Restaurante {
       imagenLogo: jsonData['imagenLogo'],
       imagenFondo: jsonData['imagenFondo'],
       categoria: jsonData['categoria'],
+      descripcion: jsonData['descripcion'],
       valoracion: int.parse(jsonData['valoracion']),
       numValoraciones: int.parse(jsonData['numValoraciones']),
       distancia: jsonData['distancia'],
@@ -72,7 +73,7 @@ class Restaurante {
   String get nombre => _nombre;
   String get imagenLogo => _imagenLogo;
   String get imagenFondo => _imagenFondo;
-  String get informacion => _informacion;
+  String get descripcion => _descripcion;
   String get categoria => _categoria;
   int get valoracion => _valoracion;
   int get numValoraciones => _numValoraciones;

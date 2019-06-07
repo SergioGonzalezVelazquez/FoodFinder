@@ -283,7 +283,6 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
                             textColor: Colors.white,
                             color: Colors.blue,
                             onPressed: () {
-                              print("Has presionado el botón de búsqueda");
                               Fluttertoast.showToast(
                                   msg: "Funcionalidad no implementada... :(");
                             },
@@ -360,9 +359,6 @@ class _RestaurantesPageState extends State<RestaurantesPage> {
         child: new InkWell(
       onTap: () {
         filtrarRestaurantes(textFilter);
-
-        filter.forEach((f) => print(f));
-        print('----------------');
       },
       child: Column(
         children: <Widget>[

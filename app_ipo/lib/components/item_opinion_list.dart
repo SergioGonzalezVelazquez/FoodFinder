@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/opinionRest_model.dart';
 import 'package:app_ipo/components/star_rating.dart';
 
-
+///Item del listado de opiniones de un restaurante.
+///Se utiliza en la pantalla de información de un restaurante
 class ItemOpinionList extends StatelessWidget {
   final OpinionRestaurante _opinion;
 

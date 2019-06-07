@@ -156,7 +156,6 @@ class _FavoritosPageState extends State<FavoritosPage>
   Widget _vistaFavoritos(BuildContext context) {
     //Se ha producido un error de conexión con el servidor
     if (listRestaurantes == null) {
-      print('Error con el servidor');
       return ConectorBBDD.errorServidor();
     } else {
       return new TabBarView(controller: _tabController, children: <Widget>[

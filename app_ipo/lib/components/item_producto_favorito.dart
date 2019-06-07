@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_ipo/model/producto_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 
+///Item del listado de productos favoritos
+///Se utliza en Favoritos -- Platos
 class ItemProductoFavorito extends StatelessWidget {
   final Producto _producto;
 

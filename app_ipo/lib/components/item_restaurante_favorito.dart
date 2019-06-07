@@ -4,6 +4,8 @@ import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/model/user_model.dart';
 
+///Item del listado de restaurantes favoritos
+///Se utliza en Favoritos -- Restaurantes
 class ItemRestauranteFavorito extends StatelessWidget {
   final Restaurante _restaurante;
   final User _user;

@@ -5,6 +5,8 @@ import 'package:app_ipo/pages/producto_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/model/user_model.dart';
 
+///Item del listado de productos de un restaurante
+///Se utliza la pantalla de información de un restaurante
 class ItemProductoList extends StatelessWidget {
   final Producto _producto;
   final Pedido _pedidoActual;

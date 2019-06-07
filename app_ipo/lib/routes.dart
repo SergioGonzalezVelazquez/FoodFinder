@@ -9,16 +9,9 @@ import 'package:app_ipo/pages/singup_page.dart';
 /// guardar las cadenas de las rutas y mantenerlas encapsuladas en las
 /// clases que representan. 
 
-
 final myRoutes = {
   '/': (BuildContext context) => LoginPage(),
   SignUpPage.nombreRuta: (BuildContext context) => SignUpPage(),
   LoginPage.nombreRuta: (BuildContext context) => LoginPage(),
-  //HomePage.nombreRuta: (BuildContext context) => HomePage(),
-  //SettingsPage.nombreRuta: (BuildContext context) => SettingsPage(),
-  //RestaurantesPage.nombreRuta: (BuildContext context) => RestaurantesPage(),
-  //PedidosPage.nombreRuta: (BuildContext context) => PedidosPage(),
-  //PerfilPage.nombreRuta: (BuildContext context) => PerfilPage(),
- // OrderPage.nombreRuta: (BuildContext context) => OrderPage(),
-  //CartPage.nombreRuta: (BuildContext context) => CartPage(),
+
 };

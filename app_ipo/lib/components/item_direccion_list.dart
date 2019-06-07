@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_ipo/model/direccion_model.dart';
 
-
+///Item del listado de direcciones guardadas por un usuario.
+///Se utiliza en Configuración -- Direcciones de entrega
 class ItemDireccionList extends StatelessWidget {
   final Direccion _direccion;
 

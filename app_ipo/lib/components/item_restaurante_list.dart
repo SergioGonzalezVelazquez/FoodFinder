@@ -5,6 +5,8 @@ import 'package:app_ipo/pages/restaurantes/restaurant_details.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 import 'package:app_ipo/model/user_model.dart';
 
+///Item del listado del listado de restaurantes
+///Se utliza la pantalla inicial
 class ItemRestauranteList extends StatelessWidget {
   final Restaurante _restaurante;
   final User _user;

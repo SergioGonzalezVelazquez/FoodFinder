@@ -3,6 +3,7 @@ import 'package:app_ipo/model/pedido_model.dart';
 import 'package:app_ipo/model/producto_cantidad_model.dart';
 import 'package:app_ipo/data/gestorBBDD.dart';
 
+///Item del listado de productos en el carro de la compra
 class ItemProductoCart extends StatefulWidget {
   final ProductoCantidad productoCantidad;
   final Pedido pedidoActual;

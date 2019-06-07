@@ -4,7 +4,17 @@ include 'conexion.php';
 
 $conexion = mysqli_connect(DB_SERVER,DB_USER,DB_PASSWORD,DB_DATABASE) or die("Error al conectar con la BD");
 
-$consultaSQL="SELECT * FROM usuarios WHERE email='".$_REQUEST["email"]. "' and password='".$_REQUEST["password"]."'";
+$email = $_REQUEST["email"];
+$password = isset($_REQUEST["password"]) ? $_REQUEST["password"] : null ;
+
+if ($password) {
+	$consultaSQL="SELECT * FROM usuarios WHERE email='".$email. "' and password='".$password."'";
+
+}else{
+	$consultaSQL="SELECT * FROM usuarios WHERE email='".$email. "'";
+}
+
+
 
 $resultadoConsulta = mysqli_query($conexion, $consultaSQL) or die ("Error al realizar la consulta en Pedidos");
 
@@ -17,6 +27,8 @@ if (mysqli_num_rows($resultadoConsulta) > 0){
 		$usuario["nombre"] = $fila["nombre"];
 		$usuario["password"] = $fila["password"];
 		$usuario["email"] = $fila["email"];
+		$usuario["fotoPerfil"] = $fila["fotoPerfil"];
+		$usuario["telefono"] = $fila["telefono"];
 		$usuario["restaurantesFavs"] = array();
 		$usuario["platosFavs"] = array();
 
