@@ -15,14 +15,18 @@
 ---
 
 ## Autenticación
+<p align="center">
+<img src="/icons/capturas/login.png" width="200"> <img src="/icons/capturas/signup.png" width="200">
+</p>
 
-- All the `code` required to get started
-- Images of what it should look like
 
 ## Restaurantes
 
-- All the `code` required to get started
-- Images of what it should look like
+<p align="center">
+<img src="/icons/capturas/drawer.png" width="200"> <img src="/icons/capturas/home.png" width="200"> <img src="/icons/capturas/searchRestaurante.png" width="200"> <img src="/icons/capturas/busquedaRestaurantes.gif" width="200">
+</p>
+
+
 
 
 ## Pedidos
