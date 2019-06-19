@@ -3,9 +3,15 @@
 > Desarrollo realizado empleando la programación Orientada a Widgets de Flutter y la programación Orientada a Objetos de Dart.
 ---
 
+## Herramientas utilizadas
+- Lenguaje de programación Dart
+- Framework Flutter
+- Visual Studio Code
+- phpMyAdmin
+- MySQL
+
 ## Funcionalidades
-> No se trata de una aplicación móvil completamente funcional, (es un PROTOTIPO), sino solo las pantallas (rutas) y widgets que formarían
->las distintas Interfaces de Usuario.
+> No se trata de una aplicación móvil completamente funcional, (es un PROTOTIPO), sino solo las pantallas (rutas) y widgets que formarían las distintas Interfaces de Usuario.
 - [Autenticación](#autenticación)
 - [Gestión de restaurantes](#restaurantes)
 - [Gestión de pedidos](#pedidos)
@@ -32,22 +38,27 @@
 ## Pedidos
 
 <p align="center">
-<img src="/icons/capturas/historicoPedidos.png" width="200"> 
+<img src="/icons/capturas/dialogPedidoOK.png" width="200"> <img src="/icons/capturas/historicoPedidos.png" width="200">  <img src="/icons/capturas/valorarPedido.png" width="200"> 
 </p>
 
 
 ## Platos
 
-- All the `code` required to get started
-- Images of what it should look like
+<p align="center">
+<img src="/icons/capturas/plato.png" width="200"> 
+</p>
+
+
+## Favoritos
+
+<p align="center">
+<img src="/icons/capturas/restFavoritos.png" width="200"> <img src="/icons/capturas/platosFavoritos.png" width="200"> 
+</p>
 
 ## Generales
+<p align="center">
+<img src="/icons/capturas/config.png" width="200"> 
+</p>
 
-- All the `code` required to get started
-- Images of what it should look like
 
 
-## Persistencia
-
-- All the `code` required to get started
-- Images of what it should look like
