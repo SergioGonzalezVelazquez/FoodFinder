@@ -47,7 +47,7 @@
 
 <br/>
 
-<p align="center"> <img src="/icons/capturas/historicoPedidos.png" width="200">  <img src="/icons/capturas/valorarPedido.png" width="200"> <img src="/icons/capturas/pedidoCompletado.png" width="200">
+<p align="center"> <img src="/icons/capturas/historicoPedidos.png" width="200"> <img src="/icons/capturas/pedidoCompletado.png" width="200"> <img src="/icons/capturas/valorarPedido.png" width="200"> 
 </p>
 
 
@@ -60,9 +60,7 @@
 
 ## Generales
 <p align="center">
-<img src="/icons/capturas/config.png" width="200"> <img src="/icons/capturas/creditoCuenta.png
-" width="200">  <img src="/icons/capturas/ajustes.png
-" width="200"> 
+<img src="/icons/capturas/config.png" width="200"> <img src="/icons/capturas/creditoCuenta.png" width="200">  <img src="/icons/capturas/ajustes.png" width="200"> 
 </p>
 
 
