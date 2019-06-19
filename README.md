@@ -32,21 +32,24 @@
 <img src="/icons/capturas/home.png" width="200"> <img src="/icons/capturas/searchRestaurante.png" width="200"> <img src="/icons/capturas/busquedaRestaurantes.gif" width="200">
 </p>
 
+## Platos
 
+<p align="center">
+<img src="/icons/capturas/plato.png" width="200"> <img src="/icons/capturas/carrito.gif" width="200"> <img src="/icons/capturas/finalizarPedido.png" width="200">
+</p>
 
 
 ## Pedidos
 
 <p align="center">
-<img src="/icons/capturas/dialogPedidoOK.png" width="200"> <img src="/icons/capturas/historicoPedidos.png" width="200">  <img src="/icons/capturas/valorarPedido.png" width="200"> 
+<img src="/icons/capturas/dialogPedidoOK.png" width="200"> <img src="/icons/capturas/vistaPedidoProgreso.png" width="200"> <img src="/icons/capturas/pedidosEnProgreso.png" width="200"> 
 </p>
 
+<br/>
 
-## Platos
-
-<p align="center">
-<img src="/icons/capturas/plato.png" width="200"> 
+<p align="center"> <img src="/icons/capturas/historicoPedidos.png" width="200">  <img src="/icons/capturas/valorarPedido.png" width="200"> <img src="/icons/capturas/pedidoCompletado.png" width="200">
 </p>
+
 
 
 ## Favoritos
@@ -57,8 +60,11 @@
 
 ## Generales
 <p align="center">
-<img src="/icons/capturas/config.png" width="200"> 
+<img src="/icons/capturas/config.png" width="200"> <img src="/icons/capturas/creditoCuenta.png
+" width="200">  <img src="/icons/capturas/ajustes.png
+" width="200"> 
 </p>
+
 
 
 
